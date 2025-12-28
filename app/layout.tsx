@@ -2,6 +2,19 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import PrimeReactProvider from "@/providers/PrimeReactProvider";
+import { PrimeReactToastProvider } from "@/providers/PrimeReactToastProvider";
+import TanstackProvider from "@/providers/TanstackProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { SidebarProvider } from "@/providers/SidebarContextProvider";
+
+import { FirebaseNotificationProvider } from "@/providers/FirebaseNotificationProvider"
+
+import { cookies } from "next/headers";
+import NextJsProgressBar from "@/utils/NextJsProgressBar";
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -11,6 +24,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,13 +36,39 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const getCookie = async () => {
+    const cookieStore = await cookies();
+    return cookieStore.get("theme");
+  };
+
+  const defaultTheme = getCookie();
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <head>
+        <link
+          id="theme-link"
+          rel="stylesheet"
+          href="/themes/lara-light-blue/theme.css"
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <NextJsProgressBar />
+        <ThemeProvider defaultTheme={defaultTheme}>
+          <PrimeReactProvider>
+            <PrimeReactToastProvider>
+              <TanstackProvider>
+                <AuthProvider>
+                  <FirebaseNotificationProvider>
+                    <SidebarProvider>{children}</SidebarProvider>
+                  </FirebaseNotificationProvider>
+                </AuthProvider>
+              </TanstackProvider>
+            </PrimeReactToastProvider>
+          </PrimeReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+

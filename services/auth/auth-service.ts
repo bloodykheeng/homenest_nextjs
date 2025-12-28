@@ -21,7 +21,7 @@ export async function postToRegister(data: any) {
 }
 
 export async function getUserService(params: any = {}) {
-  const response = await axiosAPI.get("get-logged-in-user", {
+  const response = await axiosAPI.get("check-login-status", {
     params: params?.params,
     signal: params?.signal
   });
