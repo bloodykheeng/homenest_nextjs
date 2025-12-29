@@ -89,14 +89,14 @@ const AppHeader: React.FC = () => {
             <Image
               fill
               className="dark:hidden object-contain"
-              src="/nice/logos/nice-logo.png"
+              src="/logos/homenest_light.png"
               priority={true}
               alt="Logo"
             />
             <Image
               fill
               className="hidden dark:block object-contain"
-              src="/nice/logos/nice-logo.png"
+              src="/logos/homenest_dark.png"
               priority={true}
               alt="Logo"
             />

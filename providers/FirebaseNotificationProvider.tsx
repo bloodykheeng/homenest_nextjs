@@ -63,7 +63,7 @@ export const FirebaseNotificationProvider: React.FC<NotificationProviderProps> =
     // Save token when available
     useEffect(() => {
         if (fcmToken && userData) {
-            const tokenData = { type: "admin", firebase_token: fcmToken };
+            const tokenData = { type: "web", firebase_token: fcmToken };
             saveTokenMutation.mutate(tokenData);
         }
     }, [fcmToken, memorisedUserData]);

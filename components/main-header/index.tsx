@@ -93,7 +93,7 @@ const Header = () => {
               >
                 {/* Light mode logo */}
                 <Image
-                  src="/logos/uhrc-complete-logo.png"
+                  src="/logos/homenest_light.png"
                   alt="logo"
                   width={200}   // increased width
                   height={50}   // increased height
@@ -102,7 +102,7 @@ const Header = () => {
 
                 {/* Dark mode logo */}
                 <Image
-                  src="/logos/uhrc-complete-logo.png"
+                  src="/logos/homenest_dark.png"
                   alt="logo"
                   width={200}
                   height={50}

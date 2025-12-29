@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Define role-based route groups
+// Define role-based route groups - centralized access control
 const routeGroups = {
   // Public routes that don't require authentication
   public: [
@@ -9,137 +9,167 @@ const routeGroups = {
     "/signin",
     "/signup",
     "/forgot-password",
-    "/dashboard",
   ],
 
   // Routes accessible by all authenticated users
   authenticated: [
-
     "/dashboard",
     "/dashboard/customers",
-
-
     "/dashboard/profile",
     "/dashboard/profile/edit",
     "/dashboard/users",
-
     "/dashboard/user-manual"
   ],
-  regionalManagerAndSalesAssoc: [
 
-    "/dashboard/customer-visits",
-    "/dashboard/sellout-orders",
-    "/dashboard/sellout-order-transactions",
-    "/dashboard/customer-stock-counts",
-    "/dashboard/sellout-journey-plans",
-    "/dashboard/customer-merchandises",
 
-  ],
-
-  // Routes for sellin roles
-  sellinOnly: [
-
-  ],
-  // Routes accessible only by system admin
+  // System Admin-only routes
   systemAdminOnly: [
-
-    "/dashboard/districts",
-    "/dashboard/counties",
-    "/dashboard/subcounties",
-    "/dashboard/parishes",
-    "/dashboard/villages",
-
-
+    "/dashboard/product-categories",
+    "/dashboard/product-subcategories",
+    "/dashboard/products",
     "/dashboard/roles",
     "/dashboard/queues",
     "/dashboard/audit-trail"
   ],
-  // Routes specific to CSO roles
+};
 
+// Define role groups for easy checking
+const roleGroups = {
+  systemAdmin: ["System Admin"],
+  regionalManagerAndSalesAssoc: ["Regional Manager", "Sales Associate"],
+  sellin: ["Sellin Manager", "Sellin Associate"], // Adjust as needed
 };
 
 export function proxy(req: NextRequest) {
-  // Get profile from cookies
-  const profileCookie = req.cookies.get("profile")?.value ?? "";
-  console.log("🚀 ~ middleware ~ profileCookie:", profileCookie)
+  const currentPath = req.nextUrl.pathname;
+  console.log("🚀 ~ middleware ~ currentPath:", currentPath);
 
-  //   Parse the profile to get the user role
-  let profile;
+  // Generate nonce for CSP
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+
+  // Get API URL from environment variable
+  const apiUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:8000";
+  const connectSrc = apiUrl
+    ? `'self' ${apiUrl} https: wss: ws:`
+    : "'self' https: wss: ws:";
+
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  // Content Security Policy
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    style-src 'self' ${isDevelopment ? "'unsafe-inline'" : `'nonce-${nonce}'`} https://fonts.googleapis.com;
+    img-src 'self' blob: data: ${isDevelopment ? "http: https:" : `https: ${apiUrl}`};
+    font-src 'self' https://fonts.gstatic.com data:;
+    connect-src ${connectSrc};
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'self';
+    ${!isDevelopment ? "upgrade-insecure-requests;" : ""}
+`;
+
+  const contentSecurityPolicyHeaderValue = cspHeader
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  // Get and parse profile from cookies
+  const profileCookie = req.cookies.get("profile")?.value;
+  console.log("🚀 ~ middleware ~ profileCookie:", profileCookie);
+
+  let profile = null;
   try {
-    profile = JSON.parse(profileCookie);
+    profile = profileCookie ? JSON.parse(profileCookie) : null;
   } catch (error) {
-    // // Invalid cookie format, redirect to not found
-    // return NextResponse.rewrite(new URL("/not-found", req.url));
     console.log("Invalid profile JSON in cookie:", error);
-    profile = null; // fallback if JSON parsing fails
+    profile = null;
   }
 
   const loggedInUserRole = profile?.role;
 
-  // Define role groups
-  const systemAdminRoles = ["System Admin"];
+  let response: NextResponse;
 
-
-
-  // Get current path
-  const currentPath = req.nextUrl.pathname;
-  console.log("🚀 ~ middleware ~ currentPath:", currentPath);
-  const searchParams = req.nextUrl.searchParams;
-
-  if (!profile) {
-    // Check if it's a public route that doesn't require authentication
-    if (routeGroups.public.includes(currentPath)) {
-      return NextResponse.next();
-    }
-
-    // // If on home page "/", go to signin
-    // if (currentPath === "/") {
-    //   return NextResponse.redirect(new URL("/signin", req.url));
-    // }
-
-    // //if no match just give not found
-    // return NextResponse.rewrite(new URL("/signin", req.url));
-
-    return NextResponse.redirect(new URL("/", req.url));
+  // ===============================
+  // 1️⃣ Public routes - allow everyone
+  // ===============================
+  if (routeGroups.public.includes(currentPath)) {
+    response = NextResponse.next();
   }
-
-  if (profile) {
-
-    // If on home page "/", go to dashboard
+  // ===============================
+  // 2️⃣ NOT authenticated
+  // ===============================
+  else if (!profile) {
+    // Redirect all protected routes to signin
+    response = NextResponse.redirect(new URL("/signin", req.url));
+  }
+  // ===============================
+  // 3️⃣ Authenticated - Role-based access
+  // ===============================
+  else if (profile) {
+    // Redirect authenticated users from home to dashboard
     if (currentPath === "/") {
-      // return NextResponse.redirect(new URL("/dashboard", req.url));
-      return NextResponse.redirect(new URL("/", req.url));
+      response = NextResponse.redirect(new URL("/dashboard", req.url));
     }
-
-    // Check if path is in authenticated routes (accessible by all authenticated users)
-    if (routeGroups.authenticated.includes(currentPath)) {
-      return NextResponse.next();
+    // Check authenticated routes (accessible by all authenticated users)
+    else if (
+      routeGroups.authenticated.includes(currentPath) ||
+      currentPath.startsWith("/dashboard/profile")
+    ) {
+      response = NextResponse.next();
     }
-
-
-
-
     // Check System Admin-only routes
-    if (routeGroups.systemAdminOnly.includes(currentPath)) {
-      if (systemAdminRoles.includes(loggedInUserRole)) {
-        return NextResponse.next();
+    else if (
+      routeGroups.systemAdminOnly.includes(currentPath) ||
+      currentPath.startsWith("/dashboard/product-") ||
+      currentPath.startsWith("/dashboard/roles") ||
+      currentPath.startsWith("/dashboard/queues") ||
+      currentPath.startsWith("/dashboard/audit-")
+    ) {
+      if (roleGroups.systemAdmin.includes(loggedInUserRole)) {
+        response = NextResponse.next();
       } else {
-        return NextResponse.rewrite(new URL("/not-found", req.url));
+        response = NextResponse.rewrite(new URL("/not-found", req.url));
       }
     }
-
-
-
-    // If the path is not one of the expected ones, rewrite to not-found
-    return NextResponse.rewrite(new URL("/not-found", req.url));
+    // Unknown route - 404
+    else {
+      response = NextResponse.rewrite(new URL("/not-found", req.url));
+    }
+  }
+  // ===============================
+  // 4️⃣ Fallback - Not found
+  // ===============================
+  else {
+    response = NextResponse.rewrite(new URL("/not-found", req.url));
   }
 
-  // Allow all other requests to proceed
-  return NextResponse.next();
+  // Add security headers to all responses
+  response.headers.set("x-nonce", nonce);
+  response.headers.set(
+    "Content-Security-Policy",
+    contentSecurityPolicyHeaderValue
+  );
+  response.headers.set("X-Frame-Options", "SAMEORIGIN");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set(
+    "Strict-Transport-Security",
+    "max-age=31536000; includeSubDomains; preload"
+  );
+  response.headers.delete("X-Powered-By");
+
+  return response;
 }
 
-
-
 export const config = {
-  matcher: ["/", "/dashboard/:path*"], // applies to ALL routes
+  matcher: [
+    {
+      source: "/((?!api|_next|_vercel|.*\\..*).*)",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
+  ],
 };

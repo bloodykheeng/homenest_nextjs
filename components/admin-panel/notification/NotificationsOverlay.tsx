@@ -25,19 +25,12 @@ import InlineExpandableText from "@/components/helpers/InlineExpandableText";
 
 
 
-// import MaterialUiLoaderLottie from "@/public/lottie-files/material-ui-loading-lottie.json";
-// import SnailErrorLottie from "@/public/lottie-files/snail-error-lottie.json";
-// // import SateLiteLottie from "@/public/lottie-files/satelite-loading-lottie.json";
-// // import FileLoadingLottie from "@/public/lottie-files/FileLoadingLottie.json";
-// import SkeletonLoadingLottie from "@/public/lottie-files/SkeletonLoadingLottie.json";
-// import NoDataLottie from "@/public/lottie-files/nodata.json";
-
-const MaterialUiLoaderLottie = "/lotties/material-ui-loading-lottie.json";
-const SnailErrorLottie = "/lotties/snail-error-lottie.json";
-// const SateLiteLottie = "/lotties/satelite-loading-lottie.json";
-// const FileLoadingLottie = "/lotties/FileLoadingLottie.json";
-const SkeletonLoadingLottie = "/lotties/SkeletonLoadingLottie.json";
-const NoDataLottie = "/lotties/nodata.json";
+import MaterialUiLoaderLottie from "@/public/lottie-files/material-ui-loading-lottie.json";
+import SnailErrorLottie from "@/public/lottie-files/snail-error-lottie.json";
+// import SateLiteLottie from "@/public/lottie-files/satelite-loading-lottie.json";
+// import FileLoadingLottie from "@/public/lottie-files/FileLoadingLottie.json";
+import SkeletonLoadingLottie from "@/public/lottie-files/SkeletonLoadingLottie.json";
+import NoDataLottie from "@/public/lottie-files/nodata.json";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 

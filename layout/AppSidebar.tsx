@@ -248,13 +248,36 @@ const AppSidebar: React.FC = () => {
       >
         <Link href="/">
           <Image
-            src="/nice/logos/nice-logo.png"
+            src="/logos/homenest_light.png"
             alt="logo"
             priority={true}
             width={isExpanded || isHovered || isMobileOpen ? 140 : 80}
             height={30}
             style={{ height: "40px", width: "auto" }}
+            className="dark:hidden object-contain"
           />
+
+          <Image
+            src="/logos/homenest_dark.png"
+            alt="logo"
+            priority={true}
+            width={isExpanded || isHovered || isMobileOpen ? 140 : 80}
+            height={30}
+            style={{ height: "40px", width: "auto" }}
+            className="hidden dark:block object-contain"
+          />
+
+          {/* Slogan */}
+          {(isExpanded || isHovered || isMobileOpen) && (
+            <span className="text-sm font-medium whitespace-nowrap">
+              <span className="text-green-600 dark:text-green-400">
+                Comfort
+              </span>{" "}
+              <span className="text-orange-500 dark:text-orange-400">
+                starts here
+              </span>
+            </span>
+          )}
         </Link>
       </div>
 

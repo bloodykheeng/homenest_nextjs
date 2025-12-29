@@ -6,15 +6,15 @@ importScripts(
   "https://www.gstatic.com/firebasejs/11.3.1/firebase-messaging-compat.js"
 );
 
-//----- nwt account config for development =================
+//----- homenest kimerafarouk8@gmail.com account config for development =================
 const firebaseConfig = {
-  apiKey: "AIzaSyBN1pZqvlwR-0u0xjnCqg5VOB1TxV3EFlA",
-  authDomain: "huris-dev.firebaseapp.com",
-  projectId: "huris-dev",
-  storageBucket: "huris-dev.firebasestorage.app",
-  messagingSenderId: "269252481832",
-  appId: "1:269252481832:web:1e0c3156f6b412b11eb61d",
-  measurementId: "G-TTN71FX1C7",
+  apiKey: "AIzaSyB2KaFbWnFzBb87WkU0w-m8RMaerrBHPVY",
+  authDomain: "homenest-b5304.firebaseapp.com",
+  projectId: "homenest-b5304",
+  storageBucket: "homenest-b5304.firebasestorage.app",
+  messagingSenderId: "92763941240",
+  appId: "1:92763941240:web:1c07f1a0ea9788abeec08d",
+  measurementId: "G-7MZR5S7X8Y",
 };
 
 // eslint-disable-next-line no-undef

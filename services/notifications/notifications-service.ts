@@ -40,19 +40,19 @@ export async function postToBulkDestroyNotifications(data: any) {
 // ============ Other Notification-Specific APIs ============
 
 export async function getLoggedInUserNotifications(params = {}) {
-    const response = await axiosAPI.get("get-logged-in-user-notifications", { params });
+    const response = await axiosAPI.get("getAuthUserNotifications", { params });
     return response;
 }
 
 // Get who viewed a notification (users/customers/agents)
 export async function getNotificationViewedBies(params: any) {
     // requires { notification_id: number, ...optional filters }
-    const response = await axiosAPI.get("notification-viewed-bies", { params });
+    const response = await axiosAPI.get("getNotificationViewedBies", { params });
     return response;
 }
 
 // Mark a notification as viewed by the authenticated actor (user/customer/agent)
 export async function postToMarkNotificationAsViewed(data: { notification_id: number | string }) {
-    const response = await axiosAPI.post("mark-notification-as-viewed", data);
+    const response = await axiosAPI.post("markNotificationAsViewed", data);
     return response;
 }
