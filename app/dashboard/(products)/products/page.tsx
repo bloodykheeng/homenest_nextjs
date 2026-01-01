@@ -2,7 +2,6 @@ import React from "react";
 import RecordsList from "./RecordsList";
 import PageBreadcrumb from "@/components/admin-panel/common/PageBreadCrumb";
 
-
 interface PageProps {
   params: Promise<{ productSubCategoryId?: string }>;
   searchParams: Promise<{
