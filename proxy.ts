@@ -55,10 +55,12 @@ export function proxy(req: NextRequest) {
 
   const isDevelopment = process.env.NODE_ENV === "development";
 
+  const scriptSrc = isDevelopment ? `'self' 'nonce-${nonce}' 'unsafe-eval'` : `'self' 'nonce-${nonce}' 'strict-dynamic'`;
+
   // Content Security Policy
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    script-src ${scriptSrc};
     style-src 'self' ${isDevelopment ? "'unsafe-inline'" : `'nonce-${nonce}'`} https://fonts.googleapis.com;
     img-src 'self' blob: data: ${isDevelopment ? "http: https:" : `https: ${apiUrl}`};
     font-src 'self' https://fonts.gstatic.com data:;
@@ -95,13 +97,6 @@ export function proxy(req: NextRequest) {
   // ===============================
   if (routeGroups.public.includes(currentPath)) {
     response = NextResponse.next();
-  }
-  // ===============================
-  // 2️⃣ NOT authenticated
-  // ===============================
-  else if (!profile) {
-    // Redirect all protected routes to signin
-    response = NextResponse.redirect(new URL("/signin", req.url));
   }
   // ===============================
   // 3️⃣ Authenticated - Role-based access

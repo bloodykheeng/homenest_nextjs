@@ -1,276 +1,236 @@
+// components/Header/index.tsx
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
-import Image from "next/image";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import ThemeToggler from "./ThemeToggler";
-import menuData from "./menuData";
+import { FiShoppingCart, FiUser, FiPhone } from "react-icons/fi";
 import useAuthContext from "@/providers/AuthProvider";
+import { menuData } from "./menuData";
+import SearchBar from "./SearchBar";
+import CartSidebar from "./CartSidebar";
+import MobileMenu from "./MobileMenu";
+import ThemeToggler from "./ThemeToggler";
 
 const Header = () => {
-
-  const { getUserQuery, logoutMutation } = useAuthContext();
+  const { getUserQuery } = useAuthContext();
   const loggedInUserData = getUserQuery?.data?.data;
 
-  const [navbarOpen, setNavbarOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
-  const [openIndex, setOpenIndex] = useState(-1);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState(-1);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
 
-  const usePathName = usePathname();
-
-  // Handle sticky nav on scroll
-  const handleStickyNavbar: () => void = () => {
-    setSticky(window.scrollY >= 80);
-  };
-
+  // Sticky header on scroll
   useEffect(() => {
-    window.addEventListener("scroll", handleStickyNavbar);
-    return () => {
-      window.removeEventListener("scroll", handleStickyNavbar);
-    };
+    const handleScroll = () => setSticky(window.scrollY >= 80);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-
-  // Use useMemo to create a memoized version of the click handler
+  // Close mobile menu on click outside
   const handleClickOutside = useMemo(() => {
     return (event: MouseEvent) => {
-
-      // Check if click is outside both menu and hamburger button
       const isOutsideMenu = menuRef.current && !menuRef.current.contains(event.target as Node);
-      const clickedHamburgerButton = hamburgerRef.current && hamburgerRef.current.contains(event.target as Node);
+      const clickedHamburger = hamburgerRef.current && hamburgerRef.current.contains(event.target as Node);
 
-      // If clicking outside menu AND outside hamburger button → close the menu
-      if (isOutsideMenu && !clickedHamburgerButton && navbarOpen) {
-        setNavbarOpen(false);
-        setOpenIndex(-1);
+      if (isOutsideMenu && !clickedHamburger && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+        setOpenSubmenu(-1);
       }
     };
-  }, [navbarOpen]); // Include navbarOpen in dependencies
+  }, [mobileMenuOpen]);
 
-
-  // Use the memoized handler in useEffect
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [handleClickOutside]); // Use the memoized handler as dependency
-
-  const navbarToggleHandler = (e: React.MouseEvent) => {
-    // e.stopPropagation(); // Stop event bubbling
-    console.log("🚀 ~ navbarOpen: out", navbarOpen)
-    setNavbarOpen(prev => !prev);
-  };
-
-  const handleSubmenu = (index: number) => {
-    setOpenIndex((prev) => (prev === index ? -1 : index));
-  };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [handleClickOutside]);
 
   const closeMenus = () => {
-    setNavbarOpen(false);
-    setOpenIndex(-1);
+    setMobileMenuOpen(false);
+    setOpenSubmenu(-1);
   };
 
   return (
     <>
       <header
-        className={`header top-0 left-0 z-40 flex w-full items-center ${sticky
-          ? "dark:bg-gray-dark dark:shadow-sticky-dark shadow-sticky fixed z-9999 bg-white/80 backdrop-blur-xs transition"
-          : "absolute bg-transparent"
+        className={`fixed left-0 top-0 w-full z-40 transition-all duration-300 ${sticky
+          ? "bg-white/80 dark:bg-gray-dark dark:shadow-sticky-dark shadow-sticky backdrop-blur-sm"
+          : "bg-white dark:bg-gray-dark"
           }`}
       >
-        <div className="container">
-          <div className="relative -mx-4 flex items-center justify-between">
-            <div className="w-100 max-w-full xl:mx-12"> {/* Container width increased from w-60 → w-80 */}
-              <Link
-                href="/"
-                className={`header-logo block w-full ${sticky ? "py-5 lg:py-2" : "py-5"}`}
-              >
-                {/* Light mode logo */}
-                <Image
-                  src="/logos/homenest_light.png"
-                  alt="logo"
-                  width={200}   // increased width
-                  height={50}   // increased height
-                  className="w-full h-auto dark:hidden"
-                />
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
+          {/* Top Header */}
+          <div
+            className={`flex items-center justify-between transition-all duration-200 ${sticky ? "py-4" : "py-6"
+              }`}
+          >
+            {/* Logo - Always visible */}
+            <Link className="flex-shrink-0" href="/">
+              <Image
+                src="/logos/homenest_light.png"
+                alt="Logo"
+                width={140}
+                height={40}
+                className="w-auto h-10 dark:hidden"
+              />
+              <Image
+                src="/logos/homenest_dark.png"
+                alt="Logo"
+                width={140}
+                height={40}
+                className="hidden w-auto h-10 dark:block"
+              />
+            </Link>
 
-                {/* Dark mode logo */}
-                <Image
-                  src="/logos/homenest_dark.png"
-                  alt="logo"
-                  width={200}
-                  height={50}
-                  className="hidden w-full h-auto dark:block"
-                />
-              </Link>
+            {/* Desktop: Search Bar */}
+            <div className="hidden xl:flex flex-1 max-w-[500px] mx-8">
+              <SearchBar />
             </div>
 
-            <div className="flex w-full items-center justify-between px-4">
-              <div>
-                <button
-                  ref={hamburgerRef}
-                  onClick={navbarToggleHandler}
-                  id="navbarToggler"
-                  aria-label="Mobile Menu"
-                  className="ring-primary absolute top-1/2 right-4 block translate-y-[-50%] rounded-lg px-3 py-[6px] focus:ring-2 lg:hidden"
-                >
-                  <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "top-[7px] rotate-45" : " "
-                      }`}
-                  />
-                  <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "opacity-0" : " "
-                      }`}
-                  />
-                  <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "top-[-8px] -rotate-45" : " "
-                      }`}
-                  />
-                </button>
-                <nav
-                  ref={menuRef}
-                  id="navbarCollapse"
-                  className={`navbar border-body-color/50 dark:border-body-color/20 dark:bg-dark absolute right-0 z-30 w-[250px] rounded border-[.5px] bg-white px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${navbarOpen
-                    ? "visibility top-full opacity-100"
-                    : "invisible top-[120%] opacity-0"
-                    }`}
-                >
-                  <ul className="block lg:flex lg:space-x-12">
-                    {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">
-                        {menuItem.path ? (
-                          <Link
-                            href={menuItem.path}
-                            onClick={closeMenus}
-                            className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${usePathName === menuItem.path
-                              ? "text-primary dark:text-white"
-                              : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
-                              }`}
-                          >
-                            {menuItem.title}
-                          </Link>
-                        ) : (
-                          <>
-                            <p
-                              onClick={() => handleSubmenu(index)}
-                              className="text-dark group-hover:text-primary flex cursor-pointer items-center justify-between py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 dark:text-white/70 dark:group-hover:text-white"
-                            >
-                              {menuItem.title}
-                              <span className="pl-3">
-                                <svg width="25" height="24" viewBox="0 0 25 24">
-                                  <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M6.29289 8.8427C6.68342 8.45217 7.31658 8.45217 7.70711 8.8427L12 13.1356L16.2929 8.8427C16.6834 8.45217 17.3166 8.45217 17.7071 8.8427C18.0976 9.23322 18.0976 9.86639 17.7071 10.2569L12 15.964L6.29289 10.2569C5.90237 9.86639 5.90237 9.23322 6.29289 8.8427Z"
-                                    fill="currentColor"
-                                  />
-                                </svg>
-                              </span>
-                            </p>
-                            <div
-                              className={`submenu dark:bg-dark relative top-full left-0 rounded-sm bg-white transition-[top] duration-300 group-hover:opacity-100 lg:invisible lg:absolute lg:top-[110%] lg:block lg:w-[250px] lg:p-4 lg:opacity-0 lg:shadow-lg lg:group-hover:visible lg:group-hover:top-full ${openIndex === index ? "block" : "hidden"
-                                }`}
-                            >
-                              {menuItem?.submenu?.map((submenuItem, index) => (
-                                <Link
-                                  href={submenuItem.path}
-                                  onClick={closeMenus}
-                                  key={index}
-                                  className="text-dark hover:text-primary block rounded-sm py-2.5 text-sm lg:px-3 dark:text-white/70 dark:hover:text-white"
-                                >
-                                  {submenuItem.title}
-                                </Link>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                  {/* Mobile-only sign in/up */}
-                  <div className="mt-4 border-t pt-4 lg:hidden">
-                    <Link
-                      href="/signin"
-                      className="block w-full text-center py-2 text-base font-medium text-dark hover:opacity-70 dark:text-white"
-                      onClick={closeMenus}
-                    >
-                      Sign In
-                    </Link>
-
-
-                    {getUserQuery.isLoading ? (
-                      <div className="flex justify-center py-2">
-                        <i className="pi pi-spinner pi-spin text-primary text-xl"></i>
-                      </div>
-                    ) : loggedInUserData ? (
-                      <Link
-                        href="/dashboard"
-                        className="block w-full text-center mt-2 bg-primary py-2 rounded text-white font-medium hover:bg-opacity-90"
-                        onClick={closeMenus}
-                      >
-                        Dashboard
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/login"
-                        className="block w-full text-center mt-2 bg-primary py-2 rounded text-white font-medium hover:bg-opacity-90"
-                        onClick={closeMenus}
-                      >
-                        Login
-                      </Link>
-                    )}
-                  </div>
-
-                  {/* Mobile-only theme toggle */}
-                  <div className="mt-4 border-t pt-4 lg:hidden flex justify-center">
-                    <ThemeToggler />
-                  </div>
-                </nav>
-              </div>
-              {/* Desktop sign in/up */}
-              <div className="hidden lg:flex items-center">
-                {/* <Link
-                href="/signin"
-                className="px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white"
-              >
-                Sign In
-              </Link> */}
-
-
-                {getUserQuery.isLoading ? (
-                  <i className="pi pi-spinner pi-spin text-primary text-xl"></i>
-                ) : loggedInUserData ? (
-                  <Link
-                    href="/dashboard"
-                    className="ease-in-up shadow-btn hover:shadow-btn-hover rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90"
-                  >
-                    Dashboard
-                  </Link>
-                ) : (
-                  <Link
-                    href="/signin"
-                    className="ease-in-up shadow-btn hover:shadow-btn-hover rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90"
-                  >
-                    Signin
-                  </Link>
-                )}
-
-                {/* Desktop theme toggle */}
-                <div className="hidden lg:block">
-                  <ThemeToggler />
+            {/* Desktop: Support + User + Cart + Theme */}
+            <div className="hidden xl:flex items-center gap-5">
+              {/* Support */}
+              <div className="flex items-center gap-3.5">
+                <FiPhone className="text-primary text-2xl" />
+                <div>
+                  <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">
+                    24/7 SUPPORT
+                  </span>
+                  <p className="font-medium text-sm text-dark dark:text-white">
+                    (+256) 7884-01004
+                  </p>
                 </div>
+              </div>
 
+              <span className="w-px h-7.5 bg-gray-300 dark:bg-gray-600"></span>
+
+              {/* User */}
+              <Link
+                href={loggedInUserData ? "/dashboard" : "/signin"}
+                className="flex items-center gap-2.5"
+              >
+                <FiUser className="text-primary text-2xl" />
+                <div>
+                  <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">
+                    account
+                  </span>
+                  <p className="font-medium text-sm text-dark dark:text-white">
+                    {loggedInUserData ? "Dashboard" : "Sign In"}
+                  </p>
+                </div>
+              </Link>
+
+              {/* Cart */}
+              <button onClick={() => setCartOpen(true)} className="flex items-center gap-2.5">
+                <span className="relative">
+                  <FiShoppingCart className="text-primary text-2xl" />
+                  <span className="flex items-center justify-center font-medium text-xs absolute -right-2 -top-2.5 bg-primary w-4.5 h-4.5 rounded-full text-white">
+                    0
+                  </span>
+                </span>
+                <div>
+                  <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">
+                    cart
+                  </span>
+                  <p className="font-medium text-sm text-dark dark:text-white">UGX 0</p>
+                </div>
+              </button>
+
+              {/* Theme Toggle */}
+              <ThemeToggler />
+            </div>
+
+            {/* Mobile: Hamburger only */}
+            <button
+              ref={hamburgerRef}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="xl:hidden block relative w-5.5 h-5.5"
+            >
+              <span className="block absolute right-0 w-full h-full">
+                <span
+                  className={`block relative bg-dark dark:bg-white rounded-sm w-0 h-0.5 my-1 transition-all duration-200 ${!mobileMenuOpen && "!w-full delay-300"
+                    }`}
+                />
+                <span
+                  className={`block relative bg-dark dark:bg-white rounded-sm w-0 h-0.5 my-1 transition-all duration-200 delay-150 ${!mobileMenuOpen && "!w-full delay-400"
+                    }`}
+                />
+                <span
+                  className={`block relative bg-dark dark:bg-white rounded-sm w-0 h-0.5 my-1 transition-all duration-200 delay-200 ${!mobileMenuOpen && "!w-full delay-500"
+                    }`}
+                />
+              </span>
+              <span className="block absolute right-0 w-full h-full rotate-45">
+                <span
+                  className={`block bg-dark dark:bg-white rounded-sm transition-all duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full ${!mobileMenuOpen && "!h-0 delay-0"
+                    }`}
+                />
+                <span
+                  className={`block bg-dark dark:bg-white rounded-sm transition-all duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 ${!mobileMenuOpen && "!h-0 delay-200"
+                    }`}
+                />
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop Navigation Bar */}
+        <div className="hidden xl:block border-t border-gray-300 dark:border-gray-700">
+          <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
+            <div className="flex items-center justify-between">
+              <MobileMenu
+                ref={menuRef}
+                isOpen={mobileMenuOpen}
+                menuData={menuData}
+                pathname={pathname}
+                sticky={sticky}
+                openSubmenu={openSubmenu}
+                setOpenSubmenu={setOpenSubmenu}
+                closeMenus={closeMenus}
+                loggedInUserData={loggedInUserData}
+                onCartOpen={() => setCartOpen(true)}
+              />
+
+              {/* Right Nav (Wishlist) */}
+              <div>
+                <ul className="flex items-center gap-5.5">
+                  <li className="py-4">
+                    <Link
+                      href="/wishlist"
+                      className="flex items-center gap-1.5 font-medium text-sm text-dark dark:text-white hover:text-primary dark:hover:text-primary"
+                    >
+                      Wishlist
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Dropdown */}
+      <MobileMenu
+        ref={menuRef}
+        isOpen={mobileMenuOpen}
+        menuData={menuData}
+        pathname={pathname}
+        sticky={sticky}
+        openSubmenu={openSubmenu}
+        setOpenSubmenu={setOpenSubmenu}
+        closeMenus={closeMenus}
+        loggedInUserData={loggedInUserData}
+        onCartOpen={() => setCartOpen(true)}
+      />
+
+      {/* Cart Sidebar */}
+      <CartSidebar visible={cartOpen} onHide={() => setCartOpen(false)} />
     </>
   );
 };
