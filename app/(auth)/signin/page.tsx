@@ -1,11 +1,11 @@
-import SignInForm from "./SignInForm"
+import SignInForm from "./SignInForm";
 
 function page() {
   return (
     <>
       <SignInForm />
     </>
-  )
+  );
 }
 
-export default page
+export default page;

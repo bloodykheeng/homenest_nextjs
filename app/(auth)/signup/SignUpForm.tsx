@@ -7,11 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import Image from "next/image";
 import { postToRegister } from "@/services/auth/auth-service";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
-import { Mail, Lock, Eye, EyeOff, User, UserPlus } from "lucide-react";
+import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiUserPlus } from "react-icons/fi";
 
-import { Button } from 'primereact/button';
+import { Button } from "primereact/button";
 
 // Schema validation
 const signUpSchema = z
@@ -75,7 +76,7 @@ export default function SignUpForm() {
         onSuccess: (data) => {
             queryClient.invalidateQueries();
             queryClient.invalidateQueries({ queryKey: ["logged-in-user"] });
-            router.push("/dashboard");
+            router.push("/");
         },
     });
 
@@ -87,13 +88,33 @@ export default function SignUpForm() {
 
     return (
         <div className="w-full px-6 py-10 sm:px-8 sm:py-12 min-h-[400px]">
+            {/* Brand / Back to Home */}
+            <div className="mb-6 text-center lg:hidden">
+                <Link href="/" className="inline-block">
+                    <Image
+                        src="/logos/homenest_light.png"
+                        alt="HomeNest"
+                        width={140}
+                        height={40}
+                        className="w-auto h-10 dark:hidden"
+                    />
+                    <Image
+                        src="/logos/homenest_dark.png"
+                        alt="HomeNest"
+                        width={140}
+                        height={40}
+                        className="hidden w-auto h-10 dark:block"
+                    />
+                </Link>
+            </div>
+
             {/* Header */}
             <div className="mb-8 text-center">
                 <h1 className="mb-3 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
                     Create Your Account
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-                    Join HURIS to manage human rights cases efficiently
+                    Join HomeNest and start shopping for quality home essentials
                 </p>
             </div>
 
@@ -112,13 +133,13 @@ export default function SignUpForm() {
                             control={control}
                             render={({ field }) => (
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <FiUser className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                     <input
                                         {...field}
                                         id="fullName"
                                         type="text"
                                         placeholder="Enter your full name"
-                                        className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.fullName
+                                        className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.fullName
                                             ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                                             : "border-gray-300 dark:border-gray-700"
                                             }`}
@@ -137,20 +158,20 @@ export default function SignUpForm() {
                             htmlFor="email"
                             className="mb-1 block text-sm font-medium text-gray-900 dark:text-white"
                         >
-                            Work Email or Phone Number
+                            Email or Phone Number
                         </label>
                         <Controller
                             name="email"
                             control={control}
                             render={({ field }) => (
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <FiMail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                     <input
                                         {...field}
                                         id="email"
                                         type="text"
                                         placeholder="Enter your email or phone"
-                                        className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.email
+                                        className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.email
                                             ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                                             : "border-gray-300 dark:border-gray-700"
                                             }`}
@@ -176,13 +197,13 @@ export default function SignUpForm() {
                             control={control}
                             render={({ field }) => (
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <FiLock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                     <input
                                         {...field}
                                         id="password"
                                         type={showPassword ? "text" : "password"}
                                         placeholder="Create a strong password"
-                                        className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password
+                                        className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password
                                             ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                                             : "border-gray-300 dark:border-gray-700"
                                             }`}
@@ -194,9 +215,9 @@ export default function SignUpForm() {
                                         aria-label={showPassword ? "Hide password" : "Show password"}
                                     >
                                         {showPassword ? (
-                                            <EyeOff className="h-5 w-5" />
+                                            <FiEyeOff className="h-5 w-5" />
                                         ) : (
-                                            <Eye className="h-5 w-5" />
+                                            <FiEye className="h-5 w-5" />
                                         )}
                                     </button>
                                 </div>
@@ -222,13 +243,13 @@ export default function SignUpForm() {
                             control={control}
                             render={({ field }) => (
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <FiLock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                     <input
                                         {...field}
                                         id="confirmPassword"
                                         type={showConfirmPassword ? "text" : "password"}
                                         placeholder="Confirm your password"
-                                        className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.confirmPassword
+                                        className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.confirmPassword
                                             ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                                             : "border-gray-300 dark:border-gray-700"
                                             }`}
@@ -242,9 +263,9 @@ export default function SignUpForm() {
                                         }
                                     >
                                         {showConfirmPassword ? (
-                                            <EyeOff className="h-5 w-5" />
+                                            <FiEyeOff className="h-5 w-5" />
                                         ) : (
-                                            <Eye className="h-5 w-5" />
+                                            <FiEye className="h-5 w-5" />
                                         )}
                                     </button>
                                 </div>
@@ -258,7 +279,6 @@ export default function SignUpForm() {
                     </div>
                 </div>
 
-
                 {/* Terms and Conditions Checkbox */}
                 <div>
                     <Controller
@@ -271,21 +291,21 @@ export default function SignUpForm() {
                                         type="checkbox"
                                         checked={field.value}
                                         onChange={field.onChange}
-                                        className={`mt-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-500 transition-colors focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:bg-gray-800 ${errors.agreeToTerms ? "border-red-500" : ""
+                                        className={`mt-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-primary transition-colors focus:ring-2 focus:ring-primary/20 dark:border-gray-600 dark:bg-gray-800 ${errors.agreeToTerms ? "border-red-500" : ""
                                             }`}
                                     />
                                     <span className="text-sm text-gray-700 dark:text-gray-300">
-                                        By creating an account, you agree to the{" "}
+                                        By creating an account, you agree to HomeNest&apos;s{" "}
                                         <Link
                                             href="/terms"
-                                            className="font-medium text-brand-500 hover:text-brand-600 hover:underline"
+                                            className="font-medium text-primary hover:text-primary/80 hover:underline"
                                         >
                                             Terms and Conditions
                                         </Link>{" "}
                                         and{" "}
                                         <Link
                                             href="/privacy"
-                                            className="font-medium text-brand-500 hover:text-brand-600 hover:underline"
+                                            className="font-medium text-primary hover:text-primary/80 hover:underline"
                                         >
                                             Privacy Policy
                                         </Link>
@@ -305,8 +325,14 @@ export default function SignUpForm() {
                 <div className="flex justify-center">
                     <Button
                         type="submit"
-                        label={signUpMutation.isPending ? ' Creating account...' : ' Create Account'}
-                        icon={signUpMutation.isPending ? 'pi pi-spin pi-spinner' : <UserPlus className="mr-2" />}
+                        label={signUpMutation.isPending ? " Creating account..." : " Create Account"}
+                        icon={
+                            signUpMutation.isPending ? (
+                                "pi pi-spin pi-spinner"
+                            ) : (
+                                <FiUserPlus className="mr-2" />
+                            )
+                        }
                         disabled={signUpMutation.isPending || isSubmitting}
                         className="p-3 font-semibold"
                     />
@@ -318,7 +344,7 @@ export default function SignUpForm() {
                 Already have an account?{" "}
                 <Link
                     href="/signin"
-                    className="font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+                    className="font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
                 >
                     Sign in
                 </Link>
@@ -327,8 +353,8 @@ export default function SignUpForm() {
             {/* Footer Info */}
             <div className="mt-8 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
                 <p className="text-center text-xs text-gray-600 dark:text-gray-400">
-                    This system is for authorized users only. Unauthorized access is
-                    prohibited and will be prosecuted.
+                    Your personal data is protected and will only be used to enhance your
+                    shopping experience at HomeNest.
                 </p>
             </div>
         </div>

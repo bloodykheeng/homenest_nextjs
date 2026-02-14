@@ -9,9 +9,10 @@ import { FiShoppingCart, FiUser, FiPhone } from "react-icons/fi";
 import useAuthContext from "@/providers/AuthProvider";
 import { menuData } from "./menuData";
 import SearchBar from "./SearchBar";
-import CartSidebar from "./CartSidebar";
 import MobileMenu from "./MobileMenu";
 import ThemeToggler from "./ThemeToggler";
+
+import ShoppingCartButton from "./shopping-cart/ShoppingCartButton";
 
 const Header = () => {
   const { getUserQuery } = useAuthContext();
@@ -19,7 +20,6 @@ const Header = () => {
 
   const [sticky, setSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState(-1);
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -127,20 +127,7 @@ const Header = () => {
               </Link>
 
               {/* Cart */}
-              <button onClick={() => setCartOpen(true)} className="flex items-center gap-2.5">
-                <span className="relative">
-                  <FiShoppingCart className="text-primary text-2xl" />
-                  <span className="flex items-center justify-center font-medium text-xs absolute -right-2 -top-2.5 bg-primary w-4.5 h-4.5 rounded-full text-white">
-                    0
-                  </span>
-                </span>
-                <div>
-                  <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">
-                    cart
-                  </span>
-                  <p className="font-medium text-sm text-dark dark:text-white">UGX 0</p>
-                </div>
-              </button>
+              <ShoppingCartButton />
 
               {/* Theme Toggle */}
               <ThemeToggler />
@@ -194,7 +181,6 @@ const Header = () => {
                 setOpenSubmenu={setOpenSubmenu}
                 closeMenus={closeMenus}
                 loggedInUserData={loggedInUserData}
-                onCartOpen={() => setCartOpen(true)}
               />
 
               {/* Right Nav (Wishlist) */}
@@ -226,11 +212,8 @@ const Header = () => {
         setOpenSubmenu={setOpenSubmenu}
         closeMenus={closeMenus}
         loggedInUserData={loggedInUserData}
-        onCartOpen={() => setCartOpen(true)}
       />
 
-      {/* Cart Sidebar */}
-      <CartSidebar visible={cartOpen} onHide={() => setCartOpen(false)} />
     </>
   );
 };

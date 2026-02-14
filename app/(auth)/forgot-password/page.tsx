@@ -1,13 +1,12 @@
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import { Metadata } from "next";
 
-// Forgot Password
 export const metadata: Metadata = {
-  title: "Forgot Password | Nice House of Plastics Dashboard",
+  title: "Forgot Password | HomeNest",
   description:
-    "Recover access to your Nice House of Plastics account by resetting your password.",
+    "Recover access to your HomeNest account by resetting your password.",
 };
 
-export default function SignUp() {
+export default function ForgotPassword() {
   return <ForgotPasswordForm />;
 }

@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
 
       // 🔕 disable setState-in-effect warning
       "react-hooks/set-state-in-effect": "off",
+
+      // 🔕 disable React Compiler memoization warning
+      "react-hooks/preserve-manual-memoization": "off",
     },
   },
   // Override default ignores of eslint-config-next.

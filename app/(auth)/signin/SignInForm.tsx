@@ -7,11 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import Image from "next/image";
 import { postTologin } from "@/services/auth/auth-service";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
-import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
+import { FiMail, FiLock, FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
 
-import { Button } from 'primereact/button';
+import { Button } from "primereact/button";
 
 // Schema validation
 const signInSchema = z.object({
@@ -54,7 +55,7 @@ export default function SignInForm() {
         onSuccess: () => {
             queryClient.invalidateQueries();
             queryClient.invalidateQueries({ queryKey: ["logged-in-user"] });
-            router.push("/dashboard");
+            router.push("/");
         },
     });
 
@@ -65,15 +66,24 @@ export default function SignInForm() {
     };
 
     return (
-
-
         <div className="w-full px-6 py-10 sm:px-8 sm:py-12 max-w-md">
-
-
             {/* Brand / Back to Home */}
             <div className="mb-6 text-center">
-                <Link href="/" className="text-2xl font-bold text-brand-900 dark:text-blue-400 hover:underline">
-                    HURIS
+                <Link href="/" className="inline-block">
+                    <Image
+                        src="/logos/homenest_light.png"
+                        alt="HomeNest"
+                        width={140}
+                        height={40}
+                        className="w-auto h-10 dark:hidden"
+                    />
+                    <Image
+                        src="/logos/homenest_dark.png"
+                        alt="HomeNest"
+                        width={140}
+                        height={40}
+                        className="hidden w-auto h-10 dark:block"
+                    />
                 </Link>
             </div>
 
@@ -83,7 +93,7 @@ export default function SignInForm() {
                     Welcome Back
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-                    Sign in to access the HURIS Dashboard
+                    Sign in to continue shopping at HomeNest
                 </p>
             </div>
 
@@ -101,13 +111,13 @@ export default function SignInForm() {
                         control={control}
                         render={({ field }) => (
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                <FiMail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                 <input
                                     {...field}
                                     id="email"
                                     type="text"
                                     placeholder="Enter your email or phone"
-                                    className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.email
+                                    className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.email
                                         ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                                         : "border-gray-300 dark:border-gray-700"
                                         }`}
@@ -133,13 +143,13 @@ export default function SignInForm() {
                         control={control}
                         render={({ field }) => (
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                <FiLock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                 <input
                                     {...field}
                                     id="password"
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter your password"
-                                    className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password
+                                    className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password
                                         ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                                         : "border-gray-300 dark:border-gray-700"
                                         }`}
@@ -151,9 +161,9 @@ export default function SignInForm() {
                                     aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                     {showPassword ? (
-                                        <EyeOff className="h-5 w-5" />
+                                        <FiEyeOff className="h-5 w-5" />
                                     ) : (
-                                        <Eye className="h-5 w-5" />
+                                        <FiEye className="h-5 w-5" />
                                     )}
                                 </button>
                             </div>
@@ -177,7 +187,7 @@ export default function SignInForm() {
                                     type="checkbox"
                                     checked={field.value}
                                     onChange={field.onChange}
-                                    className="h-4 w-4 rounded border-gray-300 text-brand-500 transition-colors focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:bg-gray-800"
+                                    className="h-4 w-4 rounded border-gray-300 text-primary transition-colors focus:ring-2 focus:ring-primary/20 dark:border-gray-600 dark:bg-gray-800"
                                 />
                                 <span className="text-sm text-gray-700 dark:text-gray-300">
                                     Remember me
@@ -187,7 +197,7 @@ export default function SignInForm() {
                     />
                     <Link
                         href="/forgot-password"
-                        className="text-sm font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+                        className="text-sm font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
                     >
                         Forgot password?
                     </Link>
@@ -197,35 +207,33 @@ export default function SignInForm() {
                 <div className="flex justify-center w-full">
                     <Button
                         type="submit"
-                        label={signInMutation.isPending ? 'Signing in...' : 'Sign In'}
-                        icon={<LogIn className="h-5 w-5" />}
+                        label={signInMutation.isPending ? "Signing in..." : "Sign In"}
+                        icon={<FiLogIn className="h-5 w-5" />}
                         loading={signInMutation.isPending}
                         disabled={signInMutation.isPending || isSubmitting}
-                        className="w-full rounded-lg bg-brand-500 px-4 py-3 font-semibold text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-white transition-all hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
                     />
                 </div>
             </form>
 
             {/* Sign Up Link */}
-            {/* <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-                Dont have an account?{" "}
+            <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+                Don&apos;t have an account?{" "}
                 <Link
                     href="/signup"
-                    className="font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+                    className="font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
                 >
                     Sign up
                 </Link>
-            </p> */}
+            </p>
 
             {/* Footer Info */}
             <div className="mt-8 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
                 <p className="text-center text-xs text-gray-600 dark:text-gray-400">
-                    This system is for authorized users only. Unauthorized access is
-                    prohibited and will be prosecuted.
+                    By signing in, you agree to HomeNest&apos;s Terms of Service and Privacy Policy.
+                    Your data is protected and secure.
                 </p>
             </div>
         </div>
-
-
     );
 }

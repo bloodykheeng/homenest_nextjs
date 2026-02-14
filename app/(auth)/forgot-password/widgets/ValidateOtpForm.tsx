@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, AlertTriangle, CheckCircle, ArrowLeft } from "lucide-react";
+import { FiClock, FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
 
 const validateOtpSchema = z.object({
   email: z.string().min(1, "Email is required"),
@@ -85,24 +85,22 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
 
   return (
     <div>
-      {/* Logo */}
-      <div className="mb-6 flex justify-center sm:mb-8">
-        <Link href="/" className="block">
+      {/* Logo (visible on mobile) */}
+      <div className="mb-6 flex justify-center lg:hidden">
+        <Link href="/" className="inline-block">
           <Image
-            width={300}
-            height={100}
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
-            className="h-16 w-auto dark:hidden sm:h-20 md:h-24"
-            priority
+            src="/logos/homenest_light.png"
+            alt="HomeNest"
+            width={140}
+            height={40}
+            className="w-auto h-10 dark:hidden"
           />
           <Image
-            width={300}
-            height={100}
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
-            className="hidden h-16 w-auto dark:block sm:h-20 md:h-24"
-            priority
+            src="/logos/homenest_dark.png"
+            alt="HomeNest"
+            width={140}
+            height={40}
+            className="hidden w-auto h-10 dark:block"
           />
         </Link>
       </div>
@@ -113,7 +111,7 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
           Enter Verification Code
         </h1>
         <p className="mb-3 text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-          Weve sent a 6-digit code to:
+          We&apos;ve sent a 6-digit code to:
         </p>
         <div className="mx-auto mb-4 max-w-sm rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
           <strong className="text-sm text-gray-800 dark:text-white">{email}</strong>
@@ -130,12 +128,12 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
               }`}
           >
             <div className="flex items-center justify-center gap-2 font-medium">
-              <Clock className="h-4 w-4" />
+              <FiClock className="h-4 w-4" />
               Time remaining: {formatTime(countdown)}
             </div>
             {countdown <= 30 && (
               <div className="mt-1 flex items-center justify-center gap-1 text-sm text-red-600 dark:text-red-400">
-                <AlertTriangle className="h-3 w-3" />
+                <FiAlertTriangle className="h-3 w-3" />
                 Hurry! Code will expire soon
               </div>
             )}
@@ -143,13 +141,13 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
         ) : (
           <div className="rounded-lg bg-red-100 p-3 text-center text-red-800 dark:bg-red-900/20 dark:text-red-400">
             <div className="mb-1 flex items-center justify-center gap-2 font-medium">
-              <AlertTriangle className="h-4 w-4" />
+              <FiAlertTriangle className="h-4 w-4" />
               Code Expired
             </div>
             <div className="mb-2 text-sm">Please request a new verification code</div>
             <button
               onClick={handleResetProcess}
-              className="text-sm font-medium text-brand-500 hover:text-brand-600 hover:underline"
+              className="text-sm font-medium text-primary hover:text-primary/80 hover:underline"
             >
               Request New Code
             </button>
@@ -177,7 +175,7 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
                 maxLength={6}
                 placeholder="000000"
                 disabled={timerExpired}
-                className={`w-full rounded-lg border py-3 text-center text-2xl tracking-widest transition-colors focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white ${errors.otp
+                className={`w-full rounded-lg border py-3 text-center text-2xl tracking-widest transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white ${errors.otp
                   ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                   : timerExpired
                     ? "border-gray-300 opacity-50 dark:border-gray-700"
@@ -187,7 +185,9 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
             )}
           />
           {errors.otp && (
-            <p className="mt-1.5 text-center text-xs text-red-500">{errors.otp.message}</p>
+            <p className="mt-1.5 text-center text-xs text-red-500">
+              {errors.otp.message}
+            </p>
           )}
         </div>
 
@@ -195,7 +195,7 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
         <button
           type="submit"
           disabled={formMutation?.isPending || timerExpired}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 font-semibold text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-semibold text-white transition-all hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {formMutation?.isPending ? (
             <>
@@ -223,12 +223,12 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
             </>
           ) : timerExpired ? (
             <>
-              <AlertTriangle className="h-5 w-5" />
+              <FiAlertTriangle className="h-5 w-5" />
               <span>Code Expired</span>
             </>
           ) : (
             <>
-              <CheckCircle className="h-5 w-5" />
+              <FiCheckCircle className="h-5 w-5" />
               <span>Validate Code</span>
             </>
           )}
@@ -240,13 +240,13 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
         <button
           type="button"
           onClick={handleResetProcess}
-          className="font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+          className="font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
         >
           Request New Code
         </button>
         <Link
           href="/signin"
-          className="font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+          className="font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
         >
           Back to Sign In
         </Link>
@@ -274,7 +274,7 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
             </div>
             {!timerExpired && (
               <div className="mb-6 text-center">
-                <small className="text-brand-500">
+                <small className="text-primary">
                   Time remaining: <strong>{formatTime(countdown)}</strong>
                 </small>
               </div>
@@ -283,7 +283,7 @@ const ValidateOtpForm: React.FC<ValidateOtpFormProps> = ({
               <button
                 onClick={onConfirmSubmit}
                 disabled={timerExpired}
-                className="flex-1 rounded-lg bg-brand-500 px-4 py-2.5 font-medium text-white hover:bg-brand-600 disabled:opacity-50"
+                className="flex-1 rounded-lg bg-primary px-4 py-2.5 font-medium text-white hover:bg-primary/90 disabled:opacity-50"
               >
                 Yes, Validate
               </button>

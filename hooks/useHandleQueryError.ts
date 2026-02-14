@@ -57,7 +57,7 @@ const useHandleQueryError = (query: any) => {
       Cookies.remove("profile");
 
       // Define excluded paths
-      const excludedPaths = ["/", "/signin", "/signup", "/forgot-password"];
+      const excludedPaths = ["/", "/shop", "/cart", "/signin", "/signup", "/forgot-password"];
 
       // Only redirect if not already on excluded paths
       if (!excludedPaths.includes(pathname)) {

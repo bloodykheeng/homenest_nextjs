@@ -5,8 +5,15 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
-import Image from "next/image";
-import { Lock, Eye, EyeOff, Key, CheckCircle, Circle, AlertTriangle } from "lucide-react";
+import {
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiKey,
+  FiCheckCircle,
+  FiCircle,
+  FiAlertTriangle,
+} from "react-icons/fi";
 
 const resetPasswordSchema = z
   .object({
@@ -83,28 +90,6 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
 
   return (
     <div>
-      {/* Logo */}
-      {/* <div className="mb-6 flex justify-center sm:mb-8">
-        <Link href="/" className="block">
-          <Image
-            width={300}
-            height={100}
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
-            className="h-16 w-auto dark:hidden sm:h-20 md:h-24"
-            priority
-          />
-          <Image
-            width={300}
-            height={100}
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
-            className="hidden h-16 w-auto dark:block sm:h-20 md:h-24"
-            priority
-          />
-        </Link>
-      </div> */}
-
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
@@ -132,13 +117,13 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             control={control}
             render={({ field }) => (
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <FiLock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   {...field}
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a strong password"
-                  className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password
+                  className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password
                     ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                     : "border-gray-300 dark:border-gray-700"
                     }`}
@@ -148,7 +133,11 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <FiEyeOff className="h-5 w-5" />
+                  ) : (
+                    <FiEye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             )}
@@ -171,13 +160,13 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             control={control}
             render={({ field }) => (
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <FiLock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   {...field}
                   id="password_confirmation"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
-                  className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password_confirmation
+                  className={`w-full rounded-lg border py-3 pl-10 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.password_confirmation
                     ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                     : "border-gray-300 dark:border-gray-700"
                     }`}
@@ -187,13 +176,19 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                 >
-                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showConfirmPassword ? (
+                    <FiEyeOff className="h-5 w-5" />
+                  ) : (
+                    <FiEye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             )}
           />
           {errors.password_confirmation && (
-            <p className="mt-1.5 text-xs text-red-500">{errors.password_confirmation.message}</p>
+            <p className="mt-1.5 text-xs text-red-500">
+              {errors.password_confirmation.message}
+            </p>
           )}
         </div>
 
@@ -217,9 +212,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                 }`}
             >
               {password?.length >= 8 ? (
-                <CheckCircle className="h-4 w-4" />
+                <FiCheckCircle className="h-4 w-4" />
               ) : (
-                <Circle className="h-4 w-4" />
+                <FiCircle className="h-4 w-4" />
               )}
               At least 8 characters long
             </li>
@@ -228,9 +223,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                 }`}
             >
               {/[A-Z]/.test(password || "") ? (
-                <CheckCircle className="h-4 w-4" />
+                <FiCheckCircle className="h-4 w-4" />
               ) : (
-                <Circle className="h-4 w-4" />
+                <FiCircle className="h-4 w-4" />
               )}
               Contains uppercase letter (recommended)
             </li>
@@ -239,9 +234,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                 }`}
             >
               {/[0-9]/.test(password || "") ? (
-                <CheckCircle className="h-4 w-4" />
+                <FiCheckCircle className="h-4 w-4" />
               ) : (
-                <Circle className="h-4 w-4" />
+                <FiCircle className="h-4 w-4" />
               )}
               Contains number (recommended)
             </li>
@@ -252,7 +247,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
         <button
           type="submit"
           disabled={formMutation?.isPending}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 font-semibold text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-semibold text-white transition-all hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {formMutation?.isPending ? (
             <>
@@ -280,7 +275,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             </>
           ) : (
             <>
-              <Key className="h-5 w-5" />
+              <FiKey className="h-5 w-5" />
               <span>Reset Password</span>
             </>
           )}
@@ -291,13 +286,13 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
       <div className="mt-6 flex items-center justify-between text-sm">
         <Link
           href="/signin"
-          className="font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+          className="font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
         >
           Back to Sign In
         </Link>
         <Link
           href="/"
-          className="font-medium text-brand-500 transition-colors hover:text-brand-600 hover:underline"
+          className="font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
         >
           Back to Home
         </Link>
@@ -314,18 +309,20 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
               Are you sure you want to reset the password for:
             </p>
             <div className="mb-4 rounded-lg bg-gray-100 p-3 text-center dark:bg-gray-700">
-              <strong className="text-gray-800 dark:text-white">{pendingData?.email}</strong>
+              <strong className="text-gray-800 dark:text-white">
+                {pendingData?.email}
+              </strong>
             </div>
             <div className="mb-6 rounded-lg bg-orange-50 p-3 dark:bg-orange-900/20">
               <small className="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
-                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <FiAlertTriangle className="h-4 w-4 text-orange-500" />
                 This action will permanently change your password.
               </small>
             </div>
             <div className="flex gap-3">
               <button
                 onClick={onConfirmSubmit}
-                className="flex-1 rounded-lg bg-brand-500 px-4 py-2.5 font-medium text-white hover:bg-brand-600"
+                className="flex-1 rounded-lg bg-primary px-4 py-2.5 font-medium text-white hover:bg-primary/90"
               >
                 Yes, Reset Password
               </button>

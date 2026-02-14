@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, ArrowLeft, Send } from "lucide-react";
+import { FiMail, FiArrowLeft, FiSend } from "react-icons/fi";
 
 const sendOtpSchema = z.object({
   email: z.string().refine(
@@ -53,34 +53,32 @@ const GetOtpForm: React.FC<GetOtpFormProps> = ({ onSuccess, formMutation }) => {
 
   return (
     <div>
-      {/* Logo */}
-      {/* <div className="mb-6 flex justify-center sm:mb-8">
-        <Link href="/" className="block">
+      {/* Logo (visible on mobile where left panel is hidden) */}
+      <div className="mb-6 flex justify-center lg:hidden">
+        <Link href="/" className="inline-block">
           <Image
-            width={300}
-            height={100}
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
-            className="h-16 w-auto dark:hidden sm:h-20 md:h-24"
-            priority
+            src="/logos/homenest_light.png"
+            alt="HomeNest"
+            width={140}
+            height={40}
+            className="w-auto h-10 dark:hidden"
           />
           <Image
-            width={300}
-            height={100}
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
-            className="hidden h-16 w-auto dark:block sm:h-20 md:h-24"
-            priority
+            src="/logos/homenest_dark.png"
+            alt="HomeNest"
+            width={140}
+            height={40}
+            className="hidden w-auto h-10 dark:block"
           />
         </Link>
-      </div> */}
+      </div>
 
       {/* Back Button */}
       <Link
         href="/signin"
         className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <FiArrowLeft className="h-4 w-4" />
         Back to Sign In
       </Link>
 
@@ -108,13 +106,13 @@ const GetOtpForm: React.FC<GetOtpFormProps> = ({ onSuccess, formMutation }) => {
             control={control}
             render={({ field }) => (
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <FiMail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   {...field}
                   id="email"
                   type="text"
                   placeholder="Enter your email or phone"
-                  className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.email
+                  className={`w-full rounded-lg border py-3 pl-10 pr-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 ${errors.email
                     ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                     : "border-gray-300 dark:border-gray-700"
                     }`}
@@ -131,7 +129,7 @@ const GetOtpForm: React.FC<GetOtpFormProps> = ({ onSuccess, formMutation }) => {
         <button
           type="submit"
           disabled={formMutation?.isPending}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 font-semibold text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-semibold text-white transition-all hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {formMutation?.isPending ? (
             <>
@@ -159,7 +157,7 @@ const GetOtpForm: React.FC<GetOtpFormProps> = ({ onSuccess, formMutation }) => {
             </>
           ) : (
             <>
-              <Send className="h-5 w-5" />
+              <FiSend className="h-5 w-5" />
               <span>Send Verification Code</span>
             </>
           )}
@@ -174,7 +172,8 @@ const GetOtpForm: React.FC<GetOtpFormProps> = ({ onSuccess, formMutation }) => {
               Confirm Password Reset
             </h3>
             <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-              Are you sure you want to reset your password? If yes, a verification code will be sent to:
+              Are you sure you want to reset your password? If yes, a verification
+              code will be sent to:
             </p>
             <div className="mb-6 rounded-lg bg-gray-100 p-3 dark:bg-gray-700">
               <strong className="text-gray-800 dark:text-white">
@@ -184,7 +183,7 @@ const GetOtpForm: React.FC<GetOtpFormProps> = ({ onSuccess, formMutation }) => {
             <div className="flex gap-3">
               <button
                 onClick={onConfirmSubmit}
-                className="flex-1 rounded-lg bg-brand-500 px-4 py-2.5 font-medium text-white hover:bg-brand-600"
+                className="flex-1 rounded-lg bg-primary px-4 py-2.5 font-medium text-white hover:bg-primary/90"
               >
                 Yes, Send Code
               </button>

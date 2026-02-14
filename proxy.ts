@@ -6,6 +6,8 @@ const routeGroups = {
   // Public routes that don't require authentication
   public: [
     "/",
+    "/shop",
+    "/cart",
     "/signin",
     "/signup",
     "/forgot-password",

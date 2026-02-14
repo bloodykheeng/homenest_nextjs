@@ -1,10 +1,11 @@
 // components/Header/MobileMenu.tsx
 import { forwardRef } from "react";
 import Link from "next/link";
-import { FiChevronDown, FiUser, FiShoppingCart, FiPhone, FiSearch } from "react-icons/fi";
+import { FiChevronDown, FiUser, FiPhone } from "react-icons/fi";
 import { Menu } from "./menuData";
 import ThemeToggler from "./ThemeToggler";
 import SearchBar from "./SearchBar";
+import ShoppingCartButton from "./shopping-cart/ShoppingCartButton";
 
 interface MobileMenuProps {
     isOpen: boolean;
@@ -15,7 +16,6 @@ interface MobileMenuProps {
     setOpenSubmenu: (index: number) => void;
     closeMenus: () => void;
     loggedInUserData?: any;
-    onCartOpen: () => void;
 }
 
 const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
@@ -29,7 +29,6 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
             setOpenSubmenu,
             closeMenus,
             loggedInUserData,
-            onCartOpen,
         },
         ref
     ) => {
@@ -43,8 +42,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                                 item.submenu ? (
                                     <li key={i} className="group relative">
                                         <button
-                                            className={`flex items-center gap-1.5 font-medium text-sm capitalize text-dark dark:text-white hover:text-primary ${sticky ? "py-4" : "py-6"
-                                                }`}
+                                            className={`flex items-center gap-1.5 font-medium text-sm capitalize text-dark dark:text-white hover:text-primary ${sticky ? "py-4" : "py-6"}`}
                                         >
                                             {item.title}
                                             <FiChevronDown />
@@ -55,8 +53,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                                                 <li key={j}>
                                                     <Link
                                                         href={sub.path ?? ""}
-                                                        className={`block px-4 py-2 text-dark dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary ${pathname === sub.path && "text-primary bg-gray-100 dark:bg-gray-800"
-                                                            }`}
+                                                        className={`block px-4 py-2 text-dark dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary ${pathname === sub.path && "text-primary bg-gray-100 dark:bg-gray-800"}`}
                                                     >
                                                         {sub.title}
                                                     </Link>
@@ -68,8 +65,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                                     <li key={i}>
                                         <Link
                                             href={item.path ?? ""}
-                                            className={`font-medium text-sm text-dark dark:text-white hover:text-primary flex ${sticky ? "py-4" : "py-6"
-                                                } ${pathname === item.path && "text-primary"}`}
+                                            className={`font-medium text-sm text-dark dark:text-white hover:text-primary flex ${sticky ? "py-4" : "py-6"} ${pathname === item.path && "text-primary"}`}
                                         >
                                             {item.title}
                                         </Link>
@@ -83,8 +79,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                 {/* Mobile Menu Dropdown */}
                 <div
                     ref={ref}
-                    className={`xl:hidden fixed top-[80px] left-0 right-0 z-50 bg-white dark:bg-gray-dark shadow-lg border-t border-gray-300 dark:border-gray-700 transition-all duration-300 overflow-y-auto ${isOpen ? "max-h-[calc(100vh-80px)] opacity-100" : "max-h-0 opacity-0 invisible"
-                        }`}
+                    className={`xl:hidden fixed top-[80px] left-0 right-0 z-50 bg-white dark:bg-gray-dark shadow-lg border-t border-gray-300 dark:border-gray-700 transition-all duration-300 overflow-y-auto ${isOpen ? "max-h-[calc(100vh-80px)] opacity-100" : "max-h-0 opacity-0 invisible"}`}
                 >
                     <div className="container mx-auto px-4 py-6">
                         {/* Search Bar */}
@@ -162,25 +157,10 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                                 </div>
                             </Link>
 
-                            {/* Cart */}
-                            <button
-                                onClick={() => {
-                                    onCartOpen();
-                                    closeMenus();
-                                }}
-                                className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
-                            >
-                                <span className="relative">
-                                    <FiShoppingCart className="text-primary text-xl" />
-                                    <span className="flex items-center justify-center font-medium text-xs absolute -right-2 -top-2 bg-primary w-4 h-4 rounded-full text-white">
-                                        0
-                                    </span>
-                                </span>
-                                <div className="text-left">
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Cart</p>
-                                    <p className="font-medium text-sm text-dark dark:text-white">UGX 0</p>
-                                </div>
-                            </button>
+                            {/* Cart - Self-contained button + sidebar */}
+                            <div className="px-4 py-3">
+                                <ShoppingCartButton />
+                            </div>
 
                             {/* Support */}
                             <a
@@ -201,7 +181,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                             <ThemeToggler />
                         </div>
                     </div>
-                </div >
+                </div>
             </>
         );
     }

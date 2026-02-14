@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+import Footer from "@/components/market-place/Footer";
 import Header from "@/components/main-header";
 
 

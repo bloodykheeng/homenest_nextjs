@@ -15,7 +15,7 @@ import ValidateOtpForm from "./widgets/ValidateOtpForm";
 import ResetPasswordForm from "./widgets/ResetPasswordForm";
 import SuccessDialog from "./widgets/SuccessDialog";
 
-export default function HurisForgotPasswordForm() {
+export default function ForgotPasswordForm() {
   const router = useRouter();
   const [step, setStep] = useState<"Get_OTP" | "VALIDATE_OTP" | "RESET_PASSWORD">("Get_OTP");
   const [email, setEmail] = useState("");
