@@ -58,22 +58,10 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
       formData.append("password", data?.password || "");
       formData.append("role", data?.role || "");
       formData.append("status", data?.status || "");
+      if (data?.gender) {
+        formData.append("gender", data.gender);
+      }
 
-      // Add CSO ID (for CSO Reviewer and Community Accountability Champion)
-      formData.append("cso_id", data?.cso?.id?.toString() || "");
-
-      // Add Oversight Institution ID (for Oversight Institution Admin)
-      formData.append("oversight_institution_id", data?.oversight_institution?.id?.toString() || "");
-
-      // Add areas of operation (for Community Accountability Champion)
-      formData.append("areas_of_operation", JSON.stringify(data?.areas_of_operation ?? []));
-
-      // Add location IDs (for Community Accountability Champion)
-      formData.append("state_id", data?.state?.id?.toString() || "");
-      formData.append("region_id", data?.region?.id?.toString() || "");
-      formData.append("district_id", data?.district?.id?.toString() || "");
-      formData.append("ward_id", data?.ward?.id?.toString() || "");
-      formData.append("village_id", data?.village?.id?.toString() || "");
 
       // Handle photo upload
       if (data?.photo) {

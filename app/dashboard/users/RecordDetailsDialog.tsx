@@ -93,6 +93,9 @@ const RecordDetailsDialog: React.FC<RecordDetailsDialogProps> = ({
               <p>
                 <strong>Status:</strong> {selectedRecord?.status || "N/A"}
               </p>
+              <p>
+                <strong>Gender:</strong> {selectedRecord?.gender || "N/A"}
+              </p>
             </div>
           </div>
 
@@ -108,64 +111,9 @@ const RecordDetailsDialog: React.FC<RecordDetailsDialogProps> = ({
             </div>
           </div>
 
-          {/* CSO/Oversight Institution Information */}
-          {
-            ['CSO Reviewer', 'Community Accountability Champion', 'Oversight Institution Admin'].includes(selectedRecord?.role) && (
-              <div>
-                <h4 className="text-lg font-semibold mb-3 border-b pb-1">
-                  Organization Information
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                  {['CSO Reviewer', 'Community Accountability Champion'].includes(selectedRecord?.role) && (
-                    <p>
-                      <strong>CSO:</strong>{" "}
-                      {selectedRecord?.cso?.name || "N/A"}
-                    </p>
-                  )}
 
-                  {['Oversight Institution Admin'].includes(selectedRecord?.role) && (
-                    <p>
-                      <strong>Oversight Institution:</strong>{" "}
-                      {selectedRecord?.oversight_institution?.name || "N/A"}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )
-          }
 
-          {/* Location Information */}
-          {
-            ['Community Accountability Champion'].includes(selectedRecord?.role) && (
-              <div>
-                <h4 className="text-lg font-semibold mb-3 border-b pb-1">
-                  Location Information
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                  <p>
-                    <strong>State:</strong>{" "}
-                    {selectedRecord?.state?.name || "N/A"}
-                  </p>
-                  <p>
-                    <strong>Region:</strong>{" "}
-                    {selectedRecord?.region?.name || "N/A"}
-                  </p>
-                  <p>
-                    <strong>District:</strong>{" "}
-                    {selectedRecord?.district?.name || "N/A"}
-                  </p>
-                  <p>
-                    <strong>Ward:</strong>{" "}
-                    {selectedRecord?.ward?.name || "N/A"}
-                  </p>
-                  <p>
-                    <strong>Village:</strong>{" "}
-                    {selectedRecord?.village?.name || "N/A"}
-                  </p>
-                </div>
-              </div>
-            )
-          }
+
 
           {/* User Photo */}
           {selectedRecord?.photo_url && (

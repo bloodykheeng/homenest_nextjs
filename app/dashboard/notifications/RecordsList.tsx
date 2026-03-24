@@ -97,21 +97,14 @@ function RecordsList() {
         id: number;
         title: string;
         description?: string;
-        type: "User" | "System";
+        link?: string;
+        type: "User" | "System" | "Promotional" | "Order" | "Product";
         start_date: string;
         end_date: string;
         gender?: string;
         status: "active" | "inactive";
-        target_audience: "All Users" | "CSOs" | "Oversight Institutions" | "Geographical" | "Users";
-        scope?: "States" | "Regions" | "Districts" | "Wards" | "Villages";
-        csos?: { id: number; name: string }[];
-        oversight_institutions?: { id: number; name: string }[];
-        states?: { id: number; name: string }[];
-        regions?: { id: number; name: string }[];
-        districts?: { id: number; name: string }[];
-        wards?: { id: number; name: string }[];
-        villages?: { id: number; name: string }[];
-        selected_users?: { id: number; name: string }[];
+        target_audience: "All Users" | "Local" | "International" | "Users";
+        users?: { id: number; name: string }[];
         created_at: string;
         updated_at: string;
         created_by?: { name: string };
@@ -176,12 +169,6 @@ function RecordsList() {
             field: "target_audience",
             header: "Target Audience",
             body: (rowData) => <span>{rowData?.target_audience || "N/A"}</span>
-        },
-        {
-            field: "scope",
-            header: "Scope",
-            body: (rowData) => <span>{rowData?.scope || "N/A"}</span>,
-            visible: false
         },
         {
             field: "status",

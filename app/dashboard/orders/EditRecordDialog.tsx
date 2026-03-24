@@ -7,9 +7,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
-
-import { updateNotification } from "@/services/notifications/notifications-service";
-
+import { updateOrder } from "@/services/orders/orders-service";
 import RowForm from "./widgets/RowForm";
 
 interface EditRecordDialogProps {
@@ -18,30 +16,23 @@ interface EditRecordDialogProps {
     initialData: any;
 }
 
-const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
-    visible,
-    onHide,
-    initialData
-}) => {
+const EditRecordDialog: React.FC<EditRecordDialogProps> = ({ visible, onHide, initialData }) => {
     const queryClient = useQueryClient();
     const primeReactToast = usePrimeReactToast();
 
     const editMutation = useMutation({
-        mutationFn: (updatedData: any) => updateNotification(initialData.id, updatedData),
+        mutationFn: (updatedData: any) => updateOrder(initialData?.id, updatedData),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["notifications"] });
-            primeReactToast.success("Notification updated successfully");
+            queryClient.invalidateQueries({ queryKey: ["orders"] });
+            primeReactToast.success("Order updated successfully");
             onHide();
-        }
+        },
     });
 
     useHandleMutationError(editMutation.error);
 
-    const handleFormSubmit = (formData: any) => {
-        console.log("🚀 ~ handleFormSubmit ~ formData:", formData);
-        if (formData) {
-            editMutation.mutate(formData);
-        }
+    const handleFormSubmit = (data: any) => {
+        if (data) editMutation.mutate(data);
     };
 
     const dialogFooter = (
@@ -57,24 +48,20 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
     );
 
     const defaultValues = {
-        title: "",
-        description: "",
-        link: "",
-        type: "User",
-        status: "active",
-        start_date: null,
-        end_date: null,
-        target_audience: "All Users",
-        gender: "Both",
-        users: [],
+        payment_option: "Pay on Delivery",
+        subtotal: 0,
+        tax: 0,
+        shipping_fee: 0,
+        total: 0,
+        items: [],
     };
 
     return (
         <Dialog
-            header="Edit Notification"
+            header="Edit Order"
             visible={visible}
             onHide={onHide}
-            style={{ minWidth: "50vw" }}
+            style={{ minWidth: "70vw" }}
             modal
             maximizable
             footer={dialogFooter}
@@ -87,14 +74,9 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
                     formMutation={editMutation}
                     initialData={{ ...defaultValues, ...initialData }}
                 />
-
                 {editMutation.isPending && (
-                    <div className="absolute inset-0 flex justify-center items-center bg-white/70 z-10">
-                        <ProgressSpinner
-                            style={{ width: "40px", height: "40px" }}
-                            strokeWidth="4"
-                            animationDuration="1s"
-                        />
+                    <div className="absolute inset-0 flex justify-center items-center dark:bg-black/70 bg-white/70 z-10">
+                        <ProgressSpinner style={{ width: "40px", height: "40px" }} strokeWidth="4" animationDuration="1s" />
                     </div>
                 )}
             </div>

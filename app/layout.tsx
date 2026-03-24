@@ -33,17 +33,17 @@ export const metadata: Metadata = {
     "HomeNest is an Ecommerce platform offering quality household essentials, home décor, and everyday comfort items — all in one trusted place.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const getCookie = async () => {
     const cookieStore = await cookies();
-    return cookieStore.get("theme");
+    return cookieStore.get("theme")?.value;
   };
 
-  const defaultTheme = getCookie();
+  const defaultTheme = await getCookie();
 
   return (
     <html lang="en">

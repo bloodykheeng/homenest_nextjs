@@ -37,28 +37,28 @@ export default function ThemeToggler() {
 
 
 
-      {/* UHRC Logo */}
-      <Link
-        href="https://www.uhrc.ug"
+      {/* Home Nest Logo */}
+      {/* <Link
+        href="#"
         target="_blank"
         rel="noopener noreferrer"
         className="group relative"
       >
         <div className="relative overflow-hidden rounded-lg bg-white p-2 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-800">
           <Image
-            src="/logos/uhrc-complete-logo.png"
-            alt="Uganda Human Rights Commission"
+            src="/logos/homenest_dark.png"
+            alt="Homenest UHRC Logo"
             width={120}
             height={60}
             className="h-auto w-[100px] object-contain transition-transform duration-300 group-hover:scale-105 sm:w-[120px]"
             priority
           />
-          {/* Tooltip */}
+          Tooltip
           <span className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-md bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 dark:bg-white dark:text-gray-900">
-            Visit UHRC Website
+            Home Nest
           </span>
         </div>
-      </Link>
+      </Link> */}
     </div>
   );
 }

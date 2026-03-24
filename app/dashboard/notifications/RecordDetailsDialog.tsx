@@ -77,12 +77,16 @@ const RecordDetailsDialog: React.FC<RecordDetailsDialogProps> = ({
                             </p>
                             <p><strong>Target Audience:</strong> {selectedRecord?.target_audience || "N/A"}</p>
                             <p><strong>Gender:</strong> {selectedRecord?.gender || "N/A"}</p>
-                            <p><strong>Scope:</strong> {selectedRecord?.scope || "N/A"}</p>
                             <p><strong>Start Date:</strong> {formatDate(selectedRecord?.start_date)}</p>
                             <p><strong>End Date:</strong> {formatDate(selectedRecord?.end_date)}</p>
                             <div className="col-span-2">
                                 <p><strong>Description:</strong> {selectedRecord?.description || "N/A"}</p>
                             </div>
+                            {selectedRecord?.link && (
+                                <div className="col-span-2">
+                                    <p><strong>Link:</strong> <a href={selectedRecord.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{selectedRecord.link}</a></p>
+                                </div>
+                            )}
                         </div>
                     </div>
 

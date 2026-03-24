@@ -19,6 +19,7 @@ const routeGroups = {
     "/dashboard/customers",
     "/dashboard/profile",
     "/dashboard/profile/edit",
+    "/dashboard/notifications",
     "/dashboard/users",
     "/dashboard/user-manual"
   ],

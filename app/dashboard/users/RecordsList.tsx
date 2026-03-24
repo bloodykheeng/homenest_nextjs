@@ -155,6 +155,10 @@ function RecordsList() {
       header: "Role",
     },
     {
+      field: "gender",
+      header: "Gender",
+    },
+    {
       field: "email",
       header: "Email",
     },
@@ -169,42 +173,7 @@ function RecordsList() {
       body: (rowData) => getNestedValue(rowData, "cso.name") ?? "N/A",
       visible: false,
     },
-    {
-      field: "oversight_institution",
-      header: "Oversight Institution",
-      body: (rowData) => getNestedValue(rowData, "oversight_institution.name") ?? "N/A",
-      visible: false,
-    },
-    {
-      field: "state",
-      header: "State",
-      body: (rowData) => getNestedValue(rowData, "state.name") ?? "N/A",
-      visible: false,
-    },
-    {
-      field: "region",
-      header: "Region",
-      body: (rowData) => getNestedValue(rowData, "region.name") ?? "N/A",
-      visible: false,
-    },
-    {
-      field: "district",
-      header: "District",
-      body: (rowData) => getNestedValue(rowData, "district.name") ?? "N/A",
-      visible: false,
-    },
-    {
-      field: "ward",
-      header: "Ward",
-      body: (rowData) => getNestedValue(rowData, "ward.name") ?? "N/A",
-      visible: false,
-    },
-    {
-      field: "village",
-      header: "Village",
-      body: (rowData) => getNestedValue(rowData, "village.name") ?? "N/A",
-      visible: false,
-    },
+
     {
       field: "photo_url",
       header: "User Photo",
