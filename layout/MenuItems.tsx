@@ -96,6 +96,18 @@ export const getMenuItems = (logggedInUser: any): MenuCategory[] => {
         },
 
         {
+          icon: <i className="pi pi-shopping-cart" />,
+          name: "Orders",
+          path: "/dashboard/orders",
+        },
+
+        {
+          icon: <i className="pi pi-credit-card" />,
+          name: "Transactions",
+          path: "/dashboard/transactions",
+        },
+
+        {
           icon: <RxPerson />,
           name: "Users",
           path: "/dashboard/users",

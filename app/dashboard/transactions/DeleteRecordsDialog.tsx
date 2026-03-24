@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
-import { postToBulkDestroyOrders } from "@/services/orders/orders-service";
+import { postToBulkDestroyTransactions } from "@/services/transactions/transactions-service";
 
 interface DeleteRecordsDialogProps {
     visible: boolean;
@@ -25,10 +25,10 @@ const DeleteRecordsDialog: React.FC<DeleteRecordsDialogProps> = ({
     const primeReactToast = usePrimeReactToast();
 
     const deleteMutation = useMutation({
-        mutationFn: (ids: number[]) => postToBulkDestroyOrders({ ids }),
+        mutationFn: (ids: number[]) => postToBulkDestroyTransactions({ ids }),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["orders"] });
-            primeReactToast.success("Orders deleted successfully");
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            primeReactToast.success("Transactions deleted successfully");
             setSelectedItems([]);
             onHide();
         },
@@ -70,12 +70,12 @@ const DeleteRecordsDialog: React.FC<DeleteRecordsDialogProps> = ({
             footer={dialogFooter}
         >
             <p>
-                Are you sure you want to delete {selectedItems.length} order(s)? This action
+                Are you sure you want to delete {selectedItems.length} transaction(s)? This action
                 cannot be undone.
             </p>
             <ul className="mt-2 list-disc pl-5">
                 {selectedItems.slice(0, 5).map((item) => (
-                    <li key={item.id}>Order #{item.id}</li>
+                    <li key={item.id}>Transaction #{item.id}</li>
                 ))}
                 {selectedItems.length > 5 && (
                     <li>...and {selectedItems.length - 5} more</li>

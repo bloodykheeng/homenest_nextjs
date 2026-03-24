@@ -7,28 +7,32 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
-import { postOrder } from "@/services/orders/orders-service";
+import { postTransaction } from "@/services/transactions/transactions-service";
 import RowForm from "./widgets/RowForm";
 
 interface CreateRecordDialogProps {
     visible: boolean;
     onHide: () => void;
     initialData?: any;
+    preselectedOrderId?: number;
+    openCreateDialog?: boolean;
 }
 
 const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
     visible,
     onHide,
     initialData,
+    preselectedOrderId,
+    openCreateDialog,
 }) => {
     const queryClient = useQueryClient();
     const primeReactToast = usePrimeReactToast();
 
     const createMutation = useMutation({
-        mutationFn: postOrder,
+        mutationFn: postTransaction,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["orders"] });
-            primeReactToast.success("Order created successfully");
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            primeReactToast.success("Transaction created successfully");
             onHide();
         },
     });
@@ -54,10 +58,10 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
 
     return (
         <Dialog
-            header="Create New Order"
+            header="Create New Transaction"
             visible={visible}
             onHide={onHide}
-            style={{ minWidth: "70vw" }}
+            style={{ minWidth: "50vw" }}
             modal
             maximizable
             footer={dialogFooter}
@@ -69,6 +73,7 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
                     handleFormSubmit={handleFormSubmit}
                     formMutation={createMutation}
                     initialData={initialData}
+                    preselectedOrderId={preselectedOrderId}
                 />
 
                 {createMutation.isPending && (

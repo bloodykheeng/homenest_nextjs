@@ -11,12 +11,23 @@ export async function getOrderById(id: number | string | undefined) {
 }
 
 export async function postOrder(data: any) {
-    const response = await axiosAPI.post("orders", data);
+    const response = await axiosAPI.post("orders", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
     return response;
 }
 
 export async function updateOrder(id: number | string, data: any) {
-    const response = await axiosAPI.put(`orders/${id}`, data);
+    const response = await axiosAPI.post(`orders/${id}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response;
+}
+
+export async function patchOrder(id: number | string, data: any) {
+    const response = await axiosAPI.patch(`orders/${id}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
     return response;
 }
 
@@ -26,6 +37,8 @@ export async function deleteOrderById(id: number | string) {
 }
 
 export async function postToBulkDestroyOrders(data: any) {
-    const response = await axiosAPI.post("bulk-destroy-orders", data);
+    const response = await axiosAPI.post("bulk-destroy-orders", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
     return response;
 }

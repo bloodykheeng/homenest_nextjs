@@ -16,12 +16,16 @@ interface EditRecordDialogProps {
     initialData: any;
 }
 
-const EditRecordDialog: React.FC<EditRecordDialogProps> = ({ visible, onHide, initialData }) => {
+const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
+    visible,
+    onHide,
+    initialData,
+}) => {
     const queryClient = useQueryClient();
     const primeReactToast = usePrimeReactToast();
 
     const editMutation = useMutation({
-        mutationFn: (updatedData: any) => updateOrder(initialData?.id, updatedData),
+        mutationFn: (updatedData: any) => updateOrder(initialData.id, updatedData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["orders"] });
             primeReactToast.success("Order updated successfully");
@@ -31,8 +35,10 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({ visible, onHide, in
 
     useHandleMutationError(editMutation.error);
 
-    const handleFormSubmit = (data: any) => {
-        if (data) editMutation.mutate(data);
+    const handleFormSubmit = (formData: any) => {
+        if (formData) {
+            editMutation.mutate(formData);
+        }
     };
 
     const dialogFooter = (
@@ -46,15 +52,6 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({ visible, onHide, in
             />
         </div>
     );
-
-    const defaultValues = {
-        payment_option: "Pay on Delivery",
-        subtotal: 0,
-        tax: 0,
-        shipping_fee: 0,
-        total: 0,
-        items: [],
-    };
 
     return (
         <Dialog
@@ -72,11 +69,16 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({ visible, onHide, in
                 <RowForm
                     handleFormSubmit={handleFormSubmit}
                     formMutation={editMutation}
-                    initialData={{ ...defaultValues, ...initialData }}
+                    initialData={initialData}
                 />
+
                 {editMutation.isPending && (
-                    <div className="absolute inset-0 flex justify-center items-center dark:bg-black/70 bg-white/70 z-10">
-                        <ProgressSpinner style={{ width: "40px", height: "40px" }} strokeWidth="4" animationDuration="1s" />
+                    <div className="absolute inset-0 flex justify-center items-center bg-white/70 z-10">
+                        <ProgressSpinner
+                            style={{ width: "40px", height: "40px" }}
+                            strokeWidth="4"
+                            animationDuration="1s"
+                        />
                     </div>
                 )}
             </div>

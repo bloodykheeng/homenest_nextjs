@@ -11,11 +11,11 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 
-import ProductItemsSelector, { OrderItem } from "./ProductItemsSelector";
+import ProductItemsTableSelector, { OrderItem } from "./ProductItemsTableSelector";
 
 const formSchema = z.object({
     payment_option: z.enum(["Pay Now", "Pay on Delivery"], {
-        required_error: "Payment option is required",
+        error: "Payment option is required",
     }),
     subtotal: z.number().min(0).default(0),
     tax: z.number().min(0).optional().default(0),
@@ -24,7 +24,7 @@ const formSchema = z.object({
     shipping_address: z.string().nullish().optional(),
     notes: z.string().nullish().optional(),
     guest_name: z.string().nullish().optional(),
-    guest_email: z.string().email("Invalid email").nullish().optional(),
+    guest_email: z.email("Invalid email").nullish().optional(),
     guest_phone: z.string().nullish().optional(),
     items: z
         .array(
@@ -185,7 +185,7 @@ const RowForm: React.FC<RowFormProps> = ({ handleFormSubmit, formMutation, initi
                         name="items"
                         control={control}
                         render={({ field }) => (
-                            <ProductItemsSelector
+                            <ProductItemsTableSelector
                                 value={field.value || []}
                                 onChange={field.onChange}
                             />

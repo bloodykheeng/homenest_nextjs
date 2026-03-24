@@ -3,20 +3,23 @@ import RecordsList from "./RecordsList";
 import PageBreadCrumb from "@/components/admin-panel/common/PageBreadCrumb";
 
 interface PageProps {
-    params: Promise<{ orderId?: string }>;
+    params: Promise<{ transactionId?: string }>;
     searchParams: Promise<{
-        search?: string;
         orderId?: string;
+        create?: string;
     }>;
 }
 
 async function Page({ params, searchParams }: PageProps) {
-    const { search } = await searchParams;
+    const { orderId, create } = await searchParams;
 
     return (
         <div>
-            <PageBreadCrumb pageTitle="Orders" />
-            <RecordsList initialSearch={search} />
+            <PageBreadCrumb pageTitle="Transactions" />
+            <RecordsList
+                preselectedOrderId={orderId ? parseInt(orderId) : undefined}
+                openCreateDialog={create === "true"}
+            />
         </div>
     );
 }

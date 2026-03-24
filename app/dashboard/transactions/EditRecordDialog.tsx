@@ -7,16 +7,16 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
-import { postOrder } from "@/services/orders/orders-service";
+import { updateTransaction } from "@/services/transactions/transactions-service";
 import RowForm from "./widgets/RowForm";
 
-interface CreateRecordDialogProps {
+interface EditRecordDialogProps {
     visible: boolean;
     onHide: () => void;
-    initialData?: any;
+    initialData: any;
 }
 
-const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
+const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
     visible,
     onHide,
     initialData,
@@ -24,20 +24,21 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
     const queryClient = useQueryClient();
     const primeReactToast = usePrimeReactToast();
 
-    const createMutation = useMutation({
-        mutationFn: postOrder,
+    const editMutation = useMutation({
+        mutationFn: (updatedData: any) => updateTransaction(initialData.id, updatedData),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["orders"] });
-            primeReactToast.success("Order created successfully");
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            primeReactToast.success("Transaction updated successfully");
             onHide();
         },
     });
 
-    useHandleMutationError(createMutation.error);
+    useHandleMutationError(editMutation.error);
 
-    const handleFormSubmit = (data: any) => {
-        if (!data) return;
-        createMutation.mutate(data);
+    const handleFormSubmit = (formData: any) => {
+        if (formData) {
+            editMutation.mutate(formData);
+        }
     };
 
     const dialogFooter = (
@@ -47,31 +48,31 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
                 icon="pi pi-times"
                 className="p-button-text"
                 onClick={onHide}
-                disabled={createMutation.isPending}
+                disabled={editMutation.isPending}
             />
         </div>
     );
 
     return (
         <Dialog
-            header="Create New Order"
+            header="Edit Transaction"
             visible={visible}
             onHide={onHide}
-            style={{ minWidth: "70vw" }}
+            style={{ minWidth: "50vw" }}
             modal
             maximizable
             footer={dialogFooter}
-            closeOnEscape={!createMutation.isPending}
-            closable={!createMutation.isPending}
+            closeOnEscape={!editMutation.isPending}
+            closable={!editMutation.isPending}
         >
             <div className="relative">
                 <RowForm
                     handleFormSubmit={handleFormSubmit}
-                    formMutation={createMutation}
+                    formMutation={editMutation}
                     initialData={initialData}
                 />
 
-                {createMutation.isPending && (
+                {editMutation.isPending && (
                     <div className="absolute inset-0 flex justify-center items-center bg-white/70 z-10">
                         <ProgressSpinner
                             style={{ width: "40px", height: "40px" }}
@@ -85,4 +86,4 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
     );
 };
 
-export default CreateRecordDialog;
+export default EditRecordDialog;

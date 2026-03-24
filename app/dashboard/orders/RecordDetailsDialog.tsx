@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
-import { Badge } from "primereact/badge";
-import { useRouter } from "nextjs-toploader/app";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { useRouter } from "next/navigation";
 import moment from "moment";
-
-import CreateTransactionDialog from "../transactions/CreateRecordDialog";
+import { Tag } from "primereact/tag";
 
 interface RecordDetailsDialogProps {
     visible: boolean;
@@ -18,215 +18,238 @@ interface RecordDetailsDialogProps {
 const formatDate = (date?: string): string =>
     date ? moment(date).format("Do MMMM YYYY, h:mm A") : "N/A";
 
-const statusSeverity = (status: string) => {
-    const map: Record<string, any> = {
-        pending: "warning",
-        processing: "info",
-        completed: "success",
-        cancelled: "danger",
-        success: "success",
-        failed: "danger",
-        initiated: "info",
-    };
-    return map[status] || "secondary";
+const formatCurrency = (amount?: number): string => {
+    if (amount === undefined || amount === null) return "N/A";
+    return amount.toFixed(2);
 };
 
-const RecordDetailsDialog: React.FC<RecordDetailsDialogProps> = ({ visible, onHide, selectedRecord }) => {
+const RecordDetailsDialog: React.FC<RecordDetailsDialogProps> = ({
+    visible,
+    onHide,
+    selectedRecord,
+}) => {
     const router = useRouter();
     const [showAddTransaction, setShowAddTransaction] = useState(false);
 
-    const transactions: any[] = selectedRecord?.transactions || [];
-    const items: any[] = selectedRecord?.items || [];
-    const orderId = selectedRecord?.id;
+    const transactions = selectedRecord?.transactions || [];
+    const orderItems = selectedRecord?.items || [];
 
-    const handleViewAllTransactions = () => {
-        onHide();
-        router.push(`/dashboard/transactions?orderId=${orderId}`);
+    const handleViewTransactions = () => {
+        router.push(`/dashboard/transactions?orderId=${selectedRecord?.id}`);
     };
 
+
+    const handleAddTransaction = () => {
+        router.push(`/dashboard/transactions?orderId=${selectedRecord?.id}&create=true`);
+    };
+
+    const transactionStatusBody = (rowData: any) => {
+        const severityMap: Record<string, "success" | "info" | "warning" | "danger" | null> = {
+            success: "success",
+            pending: "warning",
+            initiated: "info",
+            failed: "danger",
+        };
+        return (
+            <Tag
+                value={rowData.status || "N/A"}
+                severity={severityMap[rowData.status?.toLowerCase()] || "info"}
+            />
+        );
+    };
+
+    const transactionDateBody = (rowData: any) => formatDate(rowData.created_at);
+
     return (
-        <>
-            <Dialog
-                header="Order Details"
-                visible={visible}
-                style={{ minWidth: "300px" }}
-                modal
-                maximizable
-                footer={
-                    <Button label="Close" icon="pi pi-times" onClick={onHide} className="p-button-text" />
-                }
-                onHide={onHide}
-                closeOnEscape
-                closable
-            >
-                <div className="p-4 space-y-6 text-sm">
+        <Dialog
+            header={`Order #${selectedRecord?.id || "N/A"}`}
+            visible={visible}
+            style={{ minWidth: "80vw" }}
+            modal
+            maximizable
+            footer={
+                <div className="flex justify-end gap-2">
+                    <Button
+                        label="Close"
+                        icon="pi pi-times"
+                        onClick={onHide}
+                        className="p-button-text"
+                    />
+                </div>
+            }
+            onHide={onHide}
+            closeOnEscape
+            closable
+        >
+            <div className="p-4">
+                {/* Order Status */}
+                <div className="mb-4">
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-lg font-semibold">Order Details</h3>
+                        <Tag
+                            value={selectedRecord?.status || "N/A"}
+                            severity={
+                                selectedRecord?.status === "completed"
+                                    ? "success"
+                                    : selectedRecord?.status === "pending"
+                                        ? "warning"
+                                        : "info"
+                            }
+                        />
+                    </div>
+                </div>
 
-                    {/* Order Info */}
+                {/* Order Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                     <div>
-                        <h4 className="text-lg font-semibold mb-3 border-b pb-1">Order Information</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                            <p><strong>Order #:</strong> {selectedRecord?.id || "N/A"}</p>
-                            <p><strong>Payment Option:</strong> {selectedRecord?.payment_option || "N/A"}</p>
-                            <p>
-                                <strong>Status: </strong>
-                                <Badge value={selectedRecord?.status || "N/A"} severity={statusSeverity(selectedRecord?.status)} />
-                            </p>
-                            <p><strong>Shipping Address:</strong> {selectedRecord?.shipping_address || "N/A"}</p>
-                            <p><strong>Notes:</strong> {selectedRecord?.notes || "N/A"}</p>
-                            <p><strong>User:</strong> {selectedRecord?.user?.name || "Guest"}</p>
+                        <p className="text-sm text-gray-500">Payment Option</p>
+                        <p className="font-medium">{selectedRecord?.payment_option || "N/A"}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Subtotal</p>
+                        <p className="font-medium">{formatCurrency(selectedRecord?.subtotal)}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Tax</p>
+                        <p className="font-medium">{formatCurrency(selectedRecord?.tax)}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Shipping Fee</p>
+                        <p className="font-medium">{formatCurrency(selectedRecord?.shipping_fee)}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Total</p>
+                        <p className="font-bold text-lg">{formatCurrency(selectedRecord?.total)}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Guest Name</p>
+                        <p className="font-medium">
+                            {selectedRecord?.guest_name || "N/A"}
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Guest Email</p>
+                        <p className="font-medium">
+                            {selectedRecord?.guest_email || "N/A"}
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Guest Phone</p>
+                        <p className="font-medium">
+                            {selectedRecord?.guest_phone || "N/A"}
+                        </p>
+                    </div>
+                    <div className="md:col-span-2 lg:col-span-3">
+                        <p className="text-sm text-gray-500">Shipping Address</p>
+                        <p className="font-medium">
+                            {selectedRecord?.shipping_address || "N/A"}
+                        </p>
+                    </div>
+                    {selectedRecord?.notes && (
+                        <div className="md:col-span-2 lg:col-span-3">
+                            <p className="text-sm text-gray-500">Notes</p>
+                            <p className="font-medium">{selectedRecord?.notes}</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Order Items */}
+                <div className="mb-6">
+                    <h4 className="text-md font-semibold mb-3 border-b pb-2">Order Items</h4>
+                    {orderItems.length > 0 ? (
+                        <DataTable value={orderItems} size="small" className="mb-4">
+                            <Column field="product_name" header="Product" />
+                            <Column field="product_sku" header="SKU" />
+                            <Column field="quantity" header="Quantity" />
+                            <Column
+                                field="unit_price"
+                                header="Unit Price"
+                                body={(row) => formatCurrency(row.unit_price)}
+                            />
+                            <Column
+                                field="total_price"
+                                header="Total"
+                                body={(row) => formatCurrency(row.total_price)}
+                            />
+                        </DataTable>
+                    ) : (
+                        <p className="text-gray-500">No items in this order</p>
+                    )}
+                </div>
+
+                {/* Transactions Section */}
+                <div>
+                    <div className="flex justify-between items-center mb-3 border-b pb-2">
+                        <h4 className="text-md font-semibold m-0">
+                            Transactions ({transactions.length})
+                        </h4>
+                        <div className="flex gap-2">
+                            <Button
+                                label="View All"
+                                icon="pi pi-eye"
+                                size="small"
+                                outlined
+                                onClick={handleViewTransactions}
+                            />
+                            <Button
+                                label="Add Transaction"
+                                icon="pi pi-plus"
+                                size="small"
+                                onClick={handleAddTransaction}
+                            />
                         </div>
                     </div>
-
-                    {/* Guest Info */}
-                    {(selectedRecord?.guest_name || selectedRecord?.guest_email || selectedRecord?.guest_phone) && (
-                        <div>
-                            <h4 className="text-lg font-semibold mb-3 border-b pb-1">Guest Information</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                                <p><strong>Name:</strong> {selectedRecord?.guest_name || "N/A"}</p>
-                                <p><strong>Email:</strong> {selectedRecord?.guest_email || "N/A"}</p>
-                                <p><strong>Phone:</strong> {selectedRecord?.guest_phone || "N/A"}</p>
-                            </div>
+                    {transactions.length > 0 ? (
+                        <DataTable value={transactions} size="small">
+                            <Column field="id" header="ID" style={{ width: "80px" }} />
+                            <Column field="payment_method" header="Payment Method" />
+                            <Column
+                                field="amount"
+                                header="Amount"
+                                body={(row) => formatCurrency(row.amount)}
+                            />
+                            <Column
+                                field="status"
+                                header="Status"
+                                body={transactionStatusBody}
+                            />
+                            <Column
+                                field="created_at"
+                                header="Date"
+                                body={transactionDateBody}
+                            />
+                        </DataTable>
+                    ) : (
+                        <div className="text-center p-4 bg-gray-50 rounded">
+                            <p className="text-gray-500 mb-2">No transactions found</p>
+                            <Button
+                                label="Add Transaction"
+                                icon="pi pi-plus"
+                                size="small"
+                                onClick={handleAddTransaction}
+                            />
                         </div>
                     )}
+                </div>
 
-                    {/* Payment Details */}
-                    {selectedRecord?.payment_method && (
+                {/* Metadata */}
+                <div className="mt-6 pt-4 border-t">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-500">
                         <div>
-                            <h4 className="text-lg font-semibold mb-3 border-b pb-1">Payment Details</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                                <p><strong>Payment Method:</strong> {selectedRecord?.payment_method}</p>
-                                <p><strong>Buyer Name:</strong> {[selectedRecord?.buyer_first_name, selectedRecord?.buyer_last_name].filter(Boolean).join(" ") || "N/A"}</p>
-                                <p><strong>Buyer Email:</strong> {selectedRecord?.buyer_email || "N/A"}</p>
-                                <p><strong>Buyer Phone:</strong> {selectedRecord?.buyer_telephone || "N/A"}</p>
-                            </div>
+                            <p>Created: {formatDate(selectedRecord?.created_at)}</p>
+                            <p>By: {selectedRecord?.created_by?.name || "N/A"}</p>
                         </div>
-                    )}
-
-                    {/* Order Items */}
-                    {items.length > 0 && (
                         <div>
-                            <h4 className="text-lg font-semibold mb-3 border-b pb-1">Order Items</h4>
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm border-collapse">
-                                    <thead>
-                                        <tr className="bg-gray-100 dark:bg-gray-800">
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">Product</th>
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">SKU</th>
-                                            <th className="text-right p-2 border border-gray-200 dark:border-gray-700">Qty</th>
-                                            <th className="text-right p-2 border border-gray-200 dark:border-gray-700">Unit Price</th>
-                                            <th className="text-right p-2 border border-gray-200 dark:border-gray-700">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {items.map((item: any, idx: number) => (
-                                            <tr key={idx} className="border-b border-gray-200 dark:border-gray-700">
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">{item.product_name}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">{item.product_sku || "—"}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700 text-right">{item.quantity}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700 text-right">{Number(item.unit_price).toFixed(2)}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700 text-right font-medium">{Number(item.total_price).toFixed(2)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            {/* Totals */}
-                            <div className="mt-3 flex flex-col items-end gap-1">
-                                <p><strong>Subtotal:</strong> {Number(selectedRecord?.subtotal || 0).toFixed(2)}</p>
-                                <p><strong>Tax:</strong> {Number(selectedRecord?.tax || 0).toFixed(2)}</p>
-                                <p><strong>Shipping Fee:</strong> {Number(selectedRecord?.shipping_fee || 0).toFixed(2)}</p>
-                                <p className="text-base font-bold"><strong>Total:</strong> {Number(selectedRecord?.total || 0).toFixed(2)}</p>
-                            </div>
+                            <p>Updated: {formatDate(selectedRecord?.updated_at)}</p>
+                            <p>By: {selectedRecord?.updated_by?.name || "N/A"}</p>
                         </div>
-                    )}
-
-                    {/* Transactions */}
-                    <div>
-                        <div className="flex items-center justify-between mb-3 border-b pb-1">
-                            <h4 className="text-lg font-semibold">Transactions ({transactions.length})</h4>
-                            <div className="flex gap-2">
-                                {transactions.length === 0 ? (
-                                    <Button
-                                        label="Add Transaction"
-                                        icon="pi pi-plus"
-                                        size="small"
-                                        onClick={() => setShowAddTransaction(true)}
-                                    />
-                                ) : (
-                                    <Button
-                                        label="View All Transactions"
-                                        icon="pi pi-external-link"
-                                        size="small"
-                                        text
-                                        onClick={handleViewAllTransactions}
-                                    />
-                                )}
-                            </div>
-                        </div>
-
-                        {transactions.length > 0 ? (
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm border-collapse">
-                                    <thead>
-                                        <tr className="bg-gray-100 dark:bg-gray-800">
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">#</th>
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">Payment Method</th>
-                                            <th className="text-right p-2 border border-gray-200 dark:border-gray-700">Amount</th>
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">Currency</th>
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">Status</th>
-                                            <th className="text-left p-2 border border-gray-200 dark:border-gray-700">Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {transactions.map((tx: any) => (
-                                            <tr key={tx.id} className="border-b border-gray-200 dark:border-gray-700">
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">{tx.id}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">{tx.payment_method}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700 text-right">{Number(tx.amount).toFixed(2)}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">{tx.currency || "—"}</td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">
-                                                    <Badge value={tx.status || "N/A"} severity={statusSeverity(tx.status)} />
-                                                </td>
-                                                <td className="p-2 border border-gray-200 dark:border-gray-700">{formatDate(tx.created_at)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <div className="mt-2 flex justify-end">
-                                    <Button
-                                        label="View All Transactions"
-                                        icon="pi pi-external-link"
-                                        size="small"
-                                        text
-                                        onClick={handleViewAllTransactions}
-                                    />
-                                </div>
-                            </div>
-                        ) : (
-                            <p className="text-gray-500 italic">No transactions yet for this order.</p>
-                        )}
-                    </div>
-
-                    {/* Metadata */}
-                    <div>
-                        <h4 className="text-lg font-semibold mb-3 border-b pb-1">Metadata</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                            <p><strong>Created By:</strong> {selectedRecord?.created_by?.name || "N/A"}</p>
-                            <p><strong>Updated By:</strong> {selectedRecord?.updated_by?.name || "N/A"}</p>
-                            <p><strong>Created At:</strong> {formatDate(selectedRecord?.created_at)}</p>
-                            <p><strong>Updated At:</strong> {formatDate(selectedRecord?.updated_at)}</p>
+                        <div>
+                            <p>User: {selectedRecord?.user?.name || selectedRecord?.user?.email || "N/A"}</p>
                         </div>
                     </div>
                 </div>
-            </Dialog>
-
-            {/* Add Transaction Dialog */}
-            <CreateTransactionDialog
-                visible={showAddTransaction}
-                onHide={() => setShowAddTransaction(false)}
-                initialData={{ order_id: orderId }}
-            />
-        </>
+            </div>
+        </Dialog>
     );
 };
 
