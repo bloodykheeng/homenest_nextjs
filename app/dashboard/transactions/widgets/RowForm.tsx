@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { InputText } from "primereact/inputtext";
@@ -26,14 +26,14 @@ const requireField = (val: any, ctx: z.RefinementCtx, fieldName: string) => {
 };
 
 const formSchema = z.object({
-    order_id: z.number().superRefine((val, ctx) => requireField(val, ctx, "Order")),
+    order_id: z.coerce.number().superRefine((val, ctx) => requireField(val, ctx, "Order")),
 
     payment_method: z
         .string()
         .min(1, "Payment method is required")
         .superRefine((val, ctx) => requireField(val, ctx, "Payment Method")),
 
-    amount: z.number().min(0, "Amount must be 0 or greater"),
+    amount: z.coerce.number().min(0, "Amount must be 0 or greater"),
 
     currency: z.string().nullish().optional(),
 
@@ -78,6 +78,7 @@ interface RowFormProps {
     formMutation: any;
     initialData?: FormData;
     preselectedOrderId?: number;
+    order?: any;
 }
 
 const RowForm: React.FC<RowFormProps> = ({
@@ -95,7 +96,7 @@ const RowForm: React.FC<RowFormProps> = ({
         setValue,
         formState: { errors },
     } = useForm<FormData>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(formSchema) as Resolver<FormData>,
         defaultValues: finalInitialData,
     });
 

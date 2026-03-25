@@ -69,7 +69,9 @@ function RecordsList({ preselectedOrderId, openCreateDialog }: RecordsListProps)
 
     const formatCurrency = (amount?: number): string => {
         if (amount === undefined || amount === null) return "N/A";
-        return amount.toFixed(2);
+        const num = Number(amount);
+        if (isNaN(num)) return "N/A";
+        return num.toFixed(2);
     };
 
     const onPageChange = (event: DataTablePageEvent) => {
@@ -297,9 +299,9 @@ function RecordsList({ preselectedOrderId, openCreateDialog }: RecordsListProps)
                         onHide={() => {
                             setShowCreateRecord(false);
                             // Clear URL params if we added them
-                            if (searchParams?.get("create")) {
-                                router.replace(`/dashboard/transactions${orderIdParam ? `?orderId=${orderIdParam}` : ""}`);
-                            }
+                            // if (searchParams?.get("create")) {
+                            //     router.replace(`/dashboard/transactions${orderIdParam ? `?orderId=${orderIdParam}` : ""}`);
+                            // }
                         }}
                         preselectedOrderId={preselectedOrderId}
                     />

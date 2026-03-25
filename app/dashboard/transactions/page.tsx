@@ -18,7 +18,7 @@ async function Page({ params, searchParams }: PageProps) {
             <PageBreadCrumb pageTitle="Transactions" />
             <RecordsList
                 preselectedOrderId={orderId ? parseInt(orderId) : undefined}
-                openCreateDialog={create === "true"}
+            // openCreateDialog={create === "true" ? true : false}
             />
         </div>
     );

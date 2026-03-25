@@ -16,6 +16,9 @@ const eslintConfig = defineConfig([
 
       // 🔕 disable React Compiler memoization warning
       "react-hooks/preserve-manual-memoization": "off",
+
+      // 🔕 disable warning for unescaped entities in JSX (e.g., apostrophes)
+      "react/no-unescaped-entities": "off",
     },
   },
   // Override default ignores of eslint-config-next.

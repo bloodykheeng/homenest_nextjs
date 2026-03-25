@@ -65,7 +65,9 @@ function RecordsList({ initialSearch }: RecordsListProps) {
 
     const formatCurrency = (amount?: number): string => {
         if (amount === undefined || amount === null) return "N/A";
-        return amount.toFixed(2);
+        const num = Number(amount);
+        if (isNaN(num)) return "N/A";
+        return num.toFixed(2);
     };
 
     const onPageChange = (event: DataTablePageEvent) => {
