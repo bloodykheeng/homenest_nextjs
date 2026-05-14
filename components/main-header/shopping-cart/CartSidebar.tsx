@@ -120,7 +120,7 @@ const CartSidebar = ({ visible, onHide }: CartSidebarProps) => {
                                         <div className="flex-1 min-w-0">
                                             <h3 className="font-medium text-dark dark:text-white text-sm mb-1 line-clamp-2">
                                                 <Link
-                                                    href={`/product/${item.id}`}
+                                                    href={`/shop/product/${item.id}`}
                                                     onClick={onHide}
                                                     className="hover:text-primary transition-colors"
                                                 >

@@ -128,7 +128,7 @@ const PromoBanner = () => {
                         </div>
 
                         <Link
-                            href={`/product/${mainPromo.id}`}
+                            href={`/shop/product/${mainPromo.id}`}
                             className="inline-flex items-center gap-2 font-medium text-sm text-white bg-primary py-3 px-8 rounded-md hover:bg-opacity-90 transition-all"
                         >
                             Buy Now
@@ -203,7 +203,7 @@ const PromoBanner = () => {
                                         </p>
 
                                         <Link
-                                            href={`/product/${product.id}`}
+                                            href={`/shop/product/${product.id}`}
                                             className={`inline-flex items-center gap-2 font-medium text-sm text-white ${theme.btnBg} py-2.5 px-8 rounded-md transition-all`}
                                         >
                                             Grab Now

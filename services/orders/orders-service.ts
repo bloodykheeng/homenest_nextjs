@@ -42,3 +42,9 @@ export async function postToBulkDestroyOrders(data: any) {
     });
     return response;
 }
+
+// JSON-based order creation used by the checkout page (supports nested items array)
+export async function createOrder(data: any) {
+    const response = await axiosAPI.post("orders", data);
+    return response;
+}

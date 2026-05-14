@@ -1,19 +1,14 @@
-import Head from 'next/head';
+import { Metadata } from "next";
 import FaqsListing from "./FaqsListing";
 
+export const metadata: Metadata = {
+    title: "FAQs - HomeNest | Your Home, Made Comfortable",
+    description:
+        "Find answers to common questions about shopping on HomeNest — orders, delivery, returns, payments, and more.",
+};
+
 const FaqsPage = () => {
-    return (
-        <>
-            <Head>
-                <title>FAQs - Contract Monitoring System</title>
-                <meta
-                    name="description"
-                    content="Learn more about the Contract Monitoring System (CMS), its purpose, features, and how it enhances transparency in government projects."
-                />
-            </Head>
-            <FaqsListing />
-        </>
-    );
+    return <FaqsListing />;
 };
 
 export default FaqsPage;

@@ -8,26 +8,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
 
-import {
-  getAllUsers,
-  getUserById,
-  postUser,
-  updateUser,
-  deleteUserById,
-  postToBulkDestroyUsers,
-} from "@/services/users/users-service";
-import RowForm from "./widgets/RowForm"; // Ensure this is correct
+import { postUser } from "@/services/users/users-service";
+import RowForm from "./widgets/RowForm";
 
 interface CreateRecordDialogProps {
   visible: boolean;
   onHide: () => void;
-  initialData?: any;
 }
 
 const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
   visible,
   onHide,
-  initialData,
 }) => {
   const queryClient = useQueryClient();
   const primeReactToast = usePrimeReactToast();
@@ -77,6 +68,20 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
     }
   };
 
+  const defaultValues = {
+    name: "",
+    email: "",
+    username: "",
+    phone: "",
+    password: "",
+    gender: undefined as "Male" | "Female" | "Prefer not to say" | undefined,
+    role: "System Admin" as const,
+    status: "active" as const,
+    photo: undefined as any,
+    photo_url: undefined as string | undefined,
+    editing: false,
+  };
+
   const dialogFooter = (
     <div className="flex justify-end gap-2 mt-4">
       <Button
@@ -105,7 +110,7 @@ const CreateRecordDialog: React.FC<CreateRecordDialogProps> = ({
         <RowForm
           handleFormSubmit={handleFormSubmit}
           formMutation={createMutation}
-          initialData={{ ...initialData, name: initialData?.name || "" }}
+          initialData={defaultValues}
         />
 
         {createMutation.isPending && (

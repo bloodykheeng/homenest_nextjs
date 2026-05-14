@@ -188,7 +188,7 @@ const CountDown = () => {
 
                         {/* CTA */}
                         <Link
-                            href={`/product/${dealProduct.id}`}
+                            href={`/shop/product/${dealProduct.id}`}
                             className="inline-flex items-center gap-2 font-medium text-sm text-white bg-primary py-3 px-8 rounded-md hover:bg-opacity-90 transition-all mt-7"
                         >
                             {isExpired ? "View Product" : "Check it Out!"}

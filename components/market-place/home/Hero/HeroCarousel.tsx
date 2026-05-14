@@ -112,7 +112,7 @@ const HeroCarousel = () => {
                                     )}
 
                                     <h1 className="font-semibold text-dark dark:text-white text-lg sm:text-xl lg:text-2xl xl:text-3xl mb-2 sm:mb-3 line-clamp-2">
-                                        <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
+                                        <Link href={`/shop/product/${product.id}`} className="hover:text-primary transition-colors">
                                             {product.name}
                                         </Link>
                                     </h1>
@@ -139,7 +139,7 @@ const HeroCarousel = () => {
                                     </div>
 
                                     <Link
-                                        href={`/product/${product.id}`}
+                                        href={`/shop/product/${product.id}`}
                                         className="inline-flex items-center gap-2 font-medium text-white text-xs sm:text-sm rounded-md bg-dark dark:bg-primary py-2.5 sm:py-3 px-5 sm:px-9 transition-all duration-200 hover:bg-primary dark:hover:bg-opacity-90"
                                     >
                                         <FiShoppingCart className="text-base sm:text-lg" />

@@ -77,7 +77,7 @@ const FeaturedProducts = () => {
                         <div className="flex items-center gap-3">
                             <div className="flex-1 min-w-0">
                                 <h2 className="font-semibold text-dark dark:text-white text-sm sm:text-base lg:text-lg mb-4 sm:mb-6 line-clamp-2">
-                                    <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
+                                    <Link href={`/shop/product/${product.id}`} className="hover:text-primary transition-colors">
                                         {product.name}
                                     </Link>
                                 </h2>

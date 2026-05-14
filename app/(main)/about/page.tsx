@@ -2,43 +2,35 @@ import { Metadata } from "next";
 import AboutTabs from "./AboutTabs";
 
 export const metadata: Metadata = {
-    title: "About HURIS - Human Rights Integrated Information System",
+    title: "About HomeNest - Your Home, Made Comfortable",
     description:
-        "Learn about the Uganda Human Rights Commission (UHRC) and HURIS - an integrated system supporting complaint handling, research and education, and monitoring and inspection across all regional human rights commission offices. Established under the 1995 Constitution of Uganda.",
+        "Learn about HomeNest — Uganda's trusted online destination for quality household essentials, home décor, and everyday comfort items. Discover our story, values, and commitment to customer happiness.",
     keywords: [
-        "HURIS",
-        "Human Rights",
-        "Uganda Human Rights Commission",
-        "UHRC",
-        "Complaint Handling",
-        "Research and Education",
-        "Monitoring and Inspection",
-        "Human Rights Commission",
-        "Case Management",
-        "Regional Offices",
-        "Constitutional Mandate",
-        "Human Rights Violations",
-        "Detention Facilities",
-        "Human Rights Protection",
-        "Uganda Constitution",
-        "Article 52",
-        "Article 53",
-        "Governance Systems"
+        "HomeNest",
+        "Uganda home goods",
+        "household essentials",
+        "home décor Uganda",
+        "online shopping Uganda",
+        "furniture Uganda",
+        "kitchen appliances",
+        "bedroom accessories",
+        "comfortable living",
+        "home improvement",
     ],
     robots: "index, follow",
     openGraph: {
-        title: "About HURIS - Human Rights Integrated Information System",
+        title: "About HomeNest - Your Home, Made Comfortable",
         description:
-            "The Uganda Human Rights Commission (UHRC) operates HURIS to monitor human rights, investigate complaints, and ensure accountability across Uganda's 9 regional and 7 field offices.",
+            "HomeNest brings thousands of curated home products straight to your door at fair, transparent prices. Discover our story and values.",
         type: "website",
-        url: "https://huris.ug/about",
-        siteName: "HURIS",
+        url: "https://homenest.ug/about",
+        siteName: "HomeNest",
     },
     twitter: {
         card: "summary_large_image",
-        title: "About HURIS - Human Rights Integrated Information System",
+        title: "About HomeNest - Your Home, Made Comfortable",
         description:
-            "HURIS supports the Uganda Human Rights Commission in complaint handling, research and education, and monitoring and inspection across all regions.",
+            "Uganda's trusted online destination for quality household essentials, home décor, and everyday comfort items.",
     },
 };
 

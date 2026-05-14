@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { Slider } from "primereact/slider";
 
@@ -18,6 +18,14 @@ const PriceDropdown = ({
     onPriceChange,
 }: PriceDropdownProps) => {
     const [isOpen, setIsOpen] = useState(true);
+    // Local state for smooth slider dragging — only commits to URL on slide end
+    const [localRange, setLocalRange] = useState<[number, number]>(priceRange);
+
+    // Sync when parent resets (e.g. "Clear All")
+    const [p0, p1] = priceRange;
+    useEffect(() => {
+        setLocalRange([p0, p1]);
+    }, [p0, p1]);
 
     return (
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg">
@@ -40,10 +48,9 @@ const PriceDropdown = ({
 
             <div className={`p-5 ${isOpen ? "block" : "hidden"}`}>
                 <Slider
-                    value={priceRange}
-                    onChange={(e) =>
-                        onPriceChange(e.value as [number, number])
-                    }
+                    value={localRange}
+                    onChange={(e) => setLocalRange(e.value as [number, number])}
+                    onSlideEnd={(e) => onPriceChange(e.value as [number, number])}
                     range
                     min={minPrice}
                     max={maxPrice}
@@ -57,7 +64,7 @@ const PriceDropdown = ({
                             UGX
                         </span>
                         <span className="block px-2.5 py-1.5 text-dark dark:text-gray-300">
-                            {priceRange[0].toLocaleString()}
+                            {localRange[0].toLocaleString()}
                         </span>
                     </div>
 
@@ -68,7 +75,7 @@ const PriceDropdown = ({
                             UGX
                         </span>
                         <span className="block px-2.5 py-1.5 text-dark dark:text-gray-300">
-                            {priceRange[1].toLocaleString()}
+                            {localRange[1].toLocaleString()}
                         </span>
                     </div>
                 </div>

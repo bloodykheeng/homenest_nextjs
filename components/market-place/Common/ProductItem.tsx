@@ -1,17 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Dialog } from "primereact/dialog";
-import { InputNumber } from "primereact/inputnumber";
-import { FiShoppingCart, FiEye, FiHeart, FiMinus, FiPlus, FiX } from "react-icons/fi";
+import { FiShoppingCart, FiEye, FiHeart, FiMinus, FiPlus, FiX, FiShare2 } from "react-icons/fi";
 import { useShoppingCart } from "@/providers/ShoppingCartProvider";
+import { useFavourites } from "@/providers/FavouritesProvider";
+import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 
 const ProductItem = ({ item }: { item: any }) => {
     const [quickViewVisible, setQuickViewVisible] = useState(false);
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const { addToCart } = useShoppingCart();
+    const { isFavourite, addToFavourites, removeFromFavourites } = useFavourites();
+    const primeReactToast = usePrimeReactToast();
+    const favourited = isFavourite(item.id);
+
+    const handleShare = () => {
+        const url = `${window.location.origin}/shop/product/${item.id}`;
+        if (navigator.share) {
+            navigator.share({ title: item.name, url });
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                primeReactToast.success("Link copied!");
+            });
+        }
+    };
 
     const featuredImage = item?.product_attachments?.find((att: any) => att.featured);
     const imageUrl = featuredImage?.file_path || item?.product_attachments?.[0]?.file_path;
@@ -82,17 +97,26 @@ const ProductItem = ({ item }: { item: any }) => {
                         </button>
 
                         <button
-                            aria-label="Add to wishlist"
-                            className="flex items-center justify-center w-9 h-9 rounded-md shadow-md bg-white dark:bg-gray-700 text-dark dark:text-white hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                            aria-label={favourited ? "Remove from favourites" : "Add to favourites"}
+                            onClick={() => favourited ? removeFromFavourites(item.id) : addToFavourites(item)}
+                            className={`flex items-center justify-center w-9 h-9 rounded-md shadow-md bg-white dark:bg-gray-700 transition-colors ${favourited ? "text-red-500 dark:text-red-400" : "text-dark dark:text-white hover:text-red-500 dark:hover:text-red-400"}`}
                         >
-                            <FiHeart className="text-base" />
+                            <FiHeart className={`text-base ${favourited ? "fill-current" : ""}`} />
+                        </button>
+
+                        <button
+                            onClick={handleShare}
+                            aria-label="Share product"
+                            className="flex items-center justify-center w-9 h-9 rounded-md shadow-md bg-white dark:bg-gray-700 text-dark dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
+                        >
+                            <FiShare2 className="text-base" />
                         </button>
                     </div>
                 </div>
 
                 {/* Product Info */}
                 <h3 className="font-medium text-dark dark:text-white hover:text-primary dark:hover:text-primary transition-colors mb-1.5 line-clamp-2">
-                    <Link href={`/product/${item.id}`}>{item.name}</Link>
+                    <Link href={`/shop/product/${item.id}`}>{item.name}</Link>
                 </h3>
 
                 <div className="flex items-center gap-2 font-medium text-lg">
@@ -225,7 +249,7 @@ const ProductItem = ({ item }: { item: any }) => {
                                 </button>
 
                                 <Link
-                                    href={`/product/${item.id}`}
+                                    href={`/shop/product/${item.id}`}
                                     onClick={() => setQuickViewVisible(false)}
                                     className="inline-flex items-center gap-2 font-medium text-sm py-3 px-6 rounded-md border border-gray-200 dark:border-gray-600 text-dark dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
                                 >

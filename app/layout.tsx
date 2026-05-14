@@ -8,9 +8,12 @@ import { PrimeReactToastProvider } from "@/providers/PrimeReactToastProvider";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { SidebarProvider } from "@/providers/SidebarContextProvider";
+import { NextAuthProvider } from "@/providers/NextAuthProvider";
+import { OAuthSyncProvider } from "@/providers/OAuthSyncProvider";
 
 import { FirebaseNotificationProvider } from "@/providers/FirebaseNotificationProvider"
 import { ShoppingCartProvider } from "@/providers/ShoppingCartProvider";
+import { FavouritesProvider } from "@/providers/FavouritesProvider";
 
 import { cookies } from "next/headers";
 import NextJsProgressBar from "@/utils/NextJsProgressBar";
@@ -59,15 +62,21 @@ export default async function RootLayout({
         <ThemeProvider defaultTheme={defaultTheme}>
           <PrimeReactProvider>
             <PrimeReactToastProvider>
-              <TanstackProvider>
-                <AuthProvider>
-                  <FirebaseNotificationProvider>
-                    <ShoppingCartProvider>
-                      <SidebarProvider>{children}</SidebarProvider>
-                    </ShoppingCartProvider>
-                  </FirebaseNotificationProvider>
-                </AuthProvider>
-              </TanstackProvider>
+              <NextAuthProvider>
+                <TanstackProvider>
+                  <OAuthSyncProvider>
+                    <AuthProvider>
+                      <FirebaseNotificationProvider>
+                        <ShoppingCartProvider>
+                          <FavouritesProvider>
+                            <SidebarProvider>{children}</SidebarProvider>
+                          </FavouritesProvider>
+                        </ShoppingCartProvider>
+                      </FirebaseNotificationProvider>
+                    </AuthProvider>
+                  </OAuthSyncProvider>
+                </TanstackProvider>
+              </NextAuthProvider>
             </PrimeReactToastProvider>
           </PrimeReactProvider>
         </ThemeProvider>

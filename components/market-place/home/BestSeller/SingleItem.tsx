@@ -6,11 +6,14 @@ import Link from "next/link";
 import { Dialog } from "primereact/dialog";
 import { FiShoppingCart, FiEye, FiHeart, FiMinus, FiPlus, FiX, FiStar } from "react-icons/fi";
 import { useShoppingCart } from "@/providers/ShoppingCartProvider";
+import { useFavourites } from "@/providers/FavouritesProvider";
 
 const SingleItem = ({ item }: { item: any }) => {
     const [quickViewVisible, setQuickViewVisible] = useState(false);
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const { addToCart } = useShoppingCart();
+    const { isFavourite, addToFavourites, removeFromFavourites } = useFavourites();
+    const favourited = isFavourite(item.id);
 
     const featuredImage = item?.product_attachments?.find((att: any) => att.featured);
     const imageUrl = featuredImage?.file_path || item?.product_attachments?.[0]?.file_path;
@@ -51,7 +54,7 @@ const SingleItem = ({ item }: { item: any }) => {
                         </div>
 
                         <h3 className="font-medium text-dark dark:text-white hover:text-primary dark:hover:text-primary transition-colors mb-1.5 line-clamp-2">
-                            <Link href={`/product/${item.id}`}>{item.name}</Link>
+                            <Link href={`/shop/product/${item.id}`}>{item.name}</Link>
                         </h3>
                     </div>
 
@@ -101,10 +104,11 @@ const SingleItem = ({ item }: { item: any }) => {
                         </button>
 
                         <button
-                            aria-label="Add to wishlist"
-                            className="flex items-center justify-center w-9 h-9 rounded-md shadow-md bg-white dark:bg-gray-700 text-dark dark:text-white hover:text-white hover:bg-red-500 transition-colors"
+                            aria-label={favourited ? "Remove from favourites" : "Add to favourites"}
+                            onClick={() => favourited ? removeFromFavourites(item.id) : addToFavourites(item)}
+                            className={`flex items-center justify-center w-9 h-9 rounded-md shadow-md bg-white dark:bg-gray-700 transition-colors ${favourited ? "text-red-500" : "text-dark dark:text-white hover:text-white hover:bg-red-500"}`}
                         >
-                            <FiHeart className="text-base" />
+                            <FiHeart className={`text-base ${favourited ? "fill-current" : ""}`} />
                         </button>
                     </div>
                 </div>
@@ -221,7 +225,7 @@ const SingleItem = ({ item }: { item: any }) => {
                                 </button>
 
                                 <Link
-                                    href={`/product/${item.id}`}
+                                    href={`/shop/product/${item.id}`}
                                     onClick={() => setQuickViewVisible(false)}
                                     className="inline-flex items-center gap-2 font-medium text-sm py-3 px-6 rounded-md border border-gray-200 dark:border-gray-600 text-dark dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
                                 >

@@ -8,9 +8,17 @@ const routeGroups = {
     "/",
     "/shop",
     "/cart",
+    "/checkout",
+    "/orders",
     "/signin",
     "/signup",
     "/forgot-password",
+    "/contact",
+    "/about",
+    "/faqs",
+    "/favourites",
+    "/profile",
+    "/profile/edit",
   ],
 
   // Routes accessible by all authenticated users
@@ -100,7 +108,10 @@ export function proxy(req: NextRequest) {
   // ===============================
   // 1️⃣ Public routes - allow everyone
   // ===============================
-  if (routeGroups.public.includes(currentPath)) {
+  if (
+    routeGroups.public.includes(currentPath) ||
+    currentPath.startsWith("/shop")
+  ) {
     response = NextResponse.next();
   }
   // ===============================

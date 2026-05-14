@@ -13,6 +13,7 @@ import useHandleMutationError from "@/hooks/useHandleMutationError";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
 
 import { Button } from "primereact/button";
+import OAuthButtons from "@/components/auth/OAuthButtons";
 
 // Schema validation
 const signInSchema = z.object({
@@ -215,6 +216,17 @@ export default function SignInForm() {
                     />
                 </div>
             </form>
+
+            {/* OAuth divider */}
+            <div className="mt-6 flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+                <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">or continue with</span>
+                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+            </div>
+
+            <div className="mt-4">
+                <OAuthButtons callbackUrl="/" />
+            </div>
 
             {/* Sign Up Link */}
             <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">

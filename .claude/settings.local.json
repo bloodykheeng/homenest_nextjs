@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"d:/coding/bloodykheeng projects/fahim/homenest_nextjs/app/\\(main\\)/shop/product/[id]\")",
+      "Bash(cp \"d:/coding/bloodykheeng projects/fahim/homenest_nextjs/app/\\(main\\)/product/[id]/page.tsx\" \"d:/coding/bloodykheeng projects/fahim/homenest_nextjs/app/\\(main\\)/shop/product/[id]/page.tsx\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\);console.log\\(p.dependencies['next-auth']||'NOT INSTALLED'\\)\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\);console.log\\('next:',p.dependencies.next,'react:',p.dependencies.react\\)\")",
+      "Bash(npm install *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\);console.log\\('next-auth:',p.dependencies['next-auth'],'react-icons:',p.dependencies['react-icons']\\)\")",
+      "Bash(copy \"d:\\\\coding\\\\bloodykheeng projects\\\\fahim\\\\homenest_nextjs\\\\components\\\\market-place\\\\Profile\\\\index.tsx\" \"d:\\\\coding\\\\bloodykheeng projects\\\\fahim\\\\homenest_nextjs\\\\components\\\\market-place\\\\Profile\\\\EditProfile.tsx\")"
+    ]
+  }
+}

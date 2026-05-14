@@ -1,7 +1,7 @@
 // components/Header/MobileMenu.tsx
 import { forwardRef } from "react";
 import Link from "next/link";
-import { FiChevronDown, FiUser, FiPhone } from "react-icons/fi";
+import { FiChevronDown, FiUser, FiPhone, FiPackage, FiSettings, FiLogOut } from "react-icons/fi";
 import { Menu } from "./menuData";
 import ThemeToggler from "./ThemeToggler";
 import SearchBar from "./SearchBar";
@@ -16,6 +16,8 @@ interface MobileMenuProps {
     setOpenSubmenu: (index: number) => void;
     closeMenus: () => void;
     loggedInUserData?: any;
+    isSystemAdmin?: boolean;
+    logoutMutation?: any;
 }
 
 const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
@@ -29,6 +31,8 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
             setOpenSubmenu,
             closeMenus,
             loggedInUserData,
+            isSystemAdmin,
+            logoutMutation,
         },
         ref
     ) => {
@@ -42,7 +46,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                                 item.submenu ? (
                                     <li key={i} className="group relative">
                                         <button
-                                            className={`flex items-center gap-1.5 font-medium text-sm capitalize text-dark dark:text-white hover:text-primary ${sticky ? "py-4" : "py-6"}`}
+                                            className={`flex items-center gap-1.5 font-medium text-sm capitalize hover:text-primary dark:hover:text-primary ${sticky ? "py-4" : "py-6"} ${pathname === item.path ? "text-primary" : "text-dark dark:text-white"}`}
                                         >
                                             {item.title}
                                             <FiChevronDown />
@@ -65,7 +69,7 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                                     <li key={i}>
                                         <Link
                                             href={item.path ?? ""}
-                                            className={`font-medium text-sm text-dark dark:text-white hover:text-primary flex ${sticky ? "py-4" : "py-6"} ${pathname === item.path && "text-primary"}`}
+                                            className={`font-medium text-sm hover:text-primary dark:hover:text-primary flex ${sticky ? "py-4" : "py-6"} ${pathname === item.path ? "text-primary" : "text-dark dark:text-white"}`}
                                         >
                                             {item.title}
                                         </Link>
@@ -143,24 +147,87 @@ const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(
                         {/* User Actions */}
                         <div className="space-y-3 pb-4 border-b border-gray-300 dark:border-gray-700">
                             {/* User Account */}
-                            <Link
-                                href={loggedInUserData ? "/dashboard" : "/signin"}
-                                onClick={closeMenus}
-                                className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                            >
-                                <FiUser className="text-primary text-xl" />
-                                <div>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Account</p>
-                                    <p className="font-medium text-sm text-dark dark:text-white">
-                                        {loggedInUserData ? "Dashboard" : "Sign In"}
-                                    </p>
-                                </div>
-                            </Link>
+                            {!loggedInUserData ? (
+                                <Link
+                                    href="/signin"
+                                    onClick={closeMenus}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                                >
+                                    <FiUser className="text-primary text-xl" />
+                                    <div>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Account</p>
+                                        <p className="font-medium text-sm text-dark dark:text-white">Sign In</p>
+                                    </div>
+                                </Link>
+                            ) : isSystemAdmin ? (
+                                <>
+                                    <Link
+                                        href="/dashboard"
+                                        onClick={closeMenus}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                                    >
+                                        <FiUser className="text-primary text-xl" />
+                                        <div>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Account</p>
+                                            <p className="font-medium text-sm text-dark dark:text-white">Dashboard</p>
+                                        </div>
+                                    </Link>
+                                    <button
+                                        onClick={() => { logoutMutation?.mutate({}); closeMenus(); }}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 w-full text-red-500 dark:text-red-400"
+                                    >
+                                        <FiLogOut className="text-xl" />
+                                        <div className="text-left">
+                                            <p className="text-xs uppercase opacity-70">Account</p>
+                                            <p className="font-medium text-sm">Logout</p>
+                                        </div>
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    onClick={() => { logoutMutation?.mutate({}); closeMenus(); }}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+                                >
+                                    <FiUser className="text-primary text-xl" />
+                                    <div className="text-left">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Account</p>
+                                        <p className="font-medium text-sm text-dark dark:text-white">Logout</p>
+                                    </div>
+                                </button>
+                            )}
+
+                            {/* Profile (logged in only) */}
+                            {loggedInUserData && (
+                                <Link
+                                    href="/profile"
+                                    onClick={closeMenus}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                                >
+                                    <FiSettings className="text-primary text-xl" />
+                                    <div>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">My</p>
+                                        <p className="font-medium text-sm text-dark dark:text-white">Profile</p>
+                                    </div>
+                                </Link>
+                            )}
 
                             {/* Cart - Self-contained button + sidebar */}
                             <div className="px-4 py-3">
                                 <ShoppingCartButton />
                             </div>
+
+                            {/* Orders */}
+                            <Link
+                                href="/orders"
+                                onClick={closeMenus}
+                                className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                            >
+                                <FiPackage className="text-primary text-xl" />
+                                <div>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">My</p>
+                                    <p className="font-medium text-sm text-dark dark:text-white">Orders</p>
+                                </div>
+                            </Link>
 
                             {/* Support */}
                             <a

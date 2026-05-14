@@ -1,152 +1,164 @@
-import React from 'react';
-import { Card } from 'primereact/card';
+import React from "react";
+import { Card } from "primereact/card";
+import { FiHome, FiStar, FiTruck, FiShield, FiUsers, FiHeart } from "react-icons/fi";
+
+const values = [
+    {
+        icon: <FiHome className="text-3xl text-primary" />,
+        title: "Home-First Philosophy",
+        description:
+            "Every product we carry is chosen with one question in mind: does it make a home more comfortable, more functional, and more beautiful?",
+    },
+    {
+        icon: <FiStar className="text-3xl text-primary" />,
+        title: "Quality You Can Trust",
+        description:
+            "We rigorously vet every item in our catalogue. If it does not meet our standards for durability and finish, it does not reach your doorstep.",
+    },
+    {
+        icon: <FiTruck className="text-3xl text-primary" />,
+        title: "Reliable Delivery",
+        description:
+            "From Kampala to every corner of Uganda, we ensure your orders arrive safely and on time — no excuses, no surprises.",
+    },
+    {
+        icon: <FiShield className="text-3xl text-primary" />,
+        title: "Safe & Secure Shopping",
+        description:
+            "Your data and payments are protected with industry-standard encryption. Shop with complete confidence every time.",
+    },
+    {
+        icon: <FiUsers className="text-3xl text-primary" />,
+        title: "Community-Driven",
+        description:
+            "HomeNest was built by Ugandans, for Ugandan families. Customer feedback directly shapes our catalogue and service improvements.",
+    },
+    {
+        icon: <FiHeart className="text-3xl text-primary" />,
+        title: "Customer Happiness",
+        description:
+            "Our 24 / 7 support team is always on standby. We measure success by how satisfied you feel long after the purchase.",
+    },
+];
 
 const AboutUsPage = () => {
     return (
-        <>
-            <Card>
-                <div className="text-gray-800 dark:text-white">
-                    <h1 className="text-3xl font-bold mb-4">About the Human Rights Integrated Information System (HURIS)</h1>
-                    <p className="mb-6">
-                        HURIS is an integrated system that consists of three system modules that support complaint handling, research and education, and monitoring and inspection in human rights commission offices across all regions.
-                        The system enhances transparency, accountability, and efficiency in protecting and promoting human rights in Uganda.
-                    </p>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Background</h2>
-                        <p className="mb-4">
-                            The Uganda Human Rights Commission (UHRC) was established under the 1995 Constitution of the Republic of Uganda.
-                            The decision to establish a permanent body to monitor the human rights situation in the country was in recognition of Uganda&apos;s
-                            violent and turbulent history characterized by arbitrary arrests, detention without trial, torture, and brutal repression with
-                            impunity on the part of security organs during the pre and post-independence era.
-                        </p>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Commission&apos;s Functions</h2>
-                        <p className="mb-2">Article 52(1) of the Uganda Constitution lays down the following functions of the Commission:</p>
-                        <ul className="list-disc ml-6">
-                            <li>Investigate, at its own initiative or on complaint, any violation of human rights</li>
-                            <li>Visit jails, prisons, and places of detention to assess conditions and make recommendations</li>
-                            <li>Establish continuing programs of research, education, and information to enhance respect for human rights</li>
-                            <li>Recommend effective measures to Parliament, including compensation to victims of human rights violations</li>
-                            <li>Create and sustain awareness of constitutional provisions as the fundamental law of Uganda</li>
-                            <li>Educate and encourage the public to defend the Constitution against all forms of abuse and violation</li>
-                            <li>Formulate and implement programs to inculcate civic responsibilities and appreciation of rights and obligations</li>
-                            <li>Monitor the Government&apos;s compliance with international treaty and convention obligations on human rights</li>
-                            <li>Perform such other functions as may be provided by law</li>
-                        </ul>
-                        <p className="mt-4">
-                            Article 52(2) requires the Commission to publish periodic reports and submit annual reports to Parliament on the state of human rights and freedoms in the country.
-                        </p>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Powers of the Commission</h2>
-                        <p className="mb-2">Under Article 53(1) of the Constitution, the UHRC has the power of a court to:</p>
-                        <ul className="list-disc ml-6">
-                            <li>Summon or order any person to attend and produce relevant documents or records</li>
-                            <li>Question any person in respect of any subject matter under investigation</li>
-                            <li>Direct any person to disclose information relevant to any investigation</li>
-                            <li>Commit persons for contempt of its orders</li>
-                        </ul>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Order of Remedies</h2>
-                        <p className="mb-2">
-                            If satisfied that there has been a violation of human rights or freedom, the Commission may order:
-                        </p>
-                        <ul className="list-disc ml-6">
-                            <li>Release of a detained or restricted person</li>
-                            <li>Payment of compensation</li>
-                            <li>Any other legal remedy or redress</li>
-                        </ul>
-                        <p className="mt-2">
-                            Any person or authority dissatisfied with an order made by the Commission has the right to appeal to the High Court.
-                        </p>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Administrative Structure</h2>
-
-                        <h3 className="text-xl font-semibold mb-2 mt-4">The Commission</h3>
-                        <p className="mb-4">
-                            The governing body consists of a Chairperson and six other members appointed by the President with approval of Parliament.
-                            They serve for six years and are eligible for re-appointment.
-                        </p>
-
-                        <h3 className="text-xl font-semibold mb-2">Five Directorates</h3>
-                        <ul className="list-disc ml-6 mb-4">
-                            <li>Directorate of Complaints, Investigations and Legal Services</li>
-                            <li>Directorate of Finance and Administration</li>
-                            <li>Directorate of Research, Education and Documentation</li>
-                            <li>Directorate of Monitoring and Inspections</li>
-                            <li>Directorate of Regional Services</li>
-                        </ul>
-
-                        <h3 className="text-xl font-semibold mb-2">Regional Offices</h3>
-                        <p className="mb-2">
-                            The Commission has established nine regional offices to bring services closer to the people:
-                        </p>
-                        <ul className="list-disc ml-6 mb-4">
-                            <li>Arua Regional Office</li>
-                            <li>Kampala Central Regional Office</li>
-                            <li>Gulu Regional Office</li>
-                            <li>Soroti Regional Office</li>
-                            <li>Mbarara Regional Office</li>
-                            <li>Fort Portal Regional Office</li>
-                            <li>Jinja Regional Office</li>
-                            <li>Masaka Regional Office</li>
-                            <li>Moroto Regional Office</li>
-                        </ul>
-
-                        <h3 className="text-xl font-semibold mb-2">Field Offices</h3>
-                        <p className="mb-2">
-                            The Commission maintains seven field offices located in:
-                        </p>
-                        <ul className="list-disc ml-6">
-                            <li>Lira, Pader, and Kitgum (under Gulu Regional Office)</li>
-                            <li>Nakapiripirit and Kotido (under Moroto Regional Office)</li>
-                            <li>Kapchorwa and Kaberamaido (under Soroti Regional Office)</li>
-                        </ul>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">HURIS System Modules</h2>
-                        <ul className="list-disc ml-6">
-                            <li><strong>Complaint Handling Module:</strong> Streamlines the receipt, investigation, and resolution of human rights complaints</li>
-                            <li><strong>Research and Education Module:</strong> Supports ongoing research programs and human rights education initiatives</li>
-                            <li><strong>Monitoring and Inspection Module:</strong> Facilitates visits to detention facilities and monitoring of human rights conditions</li>
-                        </ul>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Key Benefits of HURIS</h2>
-                        <ul className="list-disc ml-6">
-                            <li>Enhanced case management and tracking of human rights complaints</li>
-                            <li>Improved coordination between regional and field offices</li>
-                            <li>Real-time monitoring and reporting capabilities</li>
-                            <li>Comprehensive research and education program management</li>
-                            <li>Efficient inspection scheduling and documentation</li>
-                            <li>Data-driven insights for annual parliamentary reports</li>
-                        </ul>
-                    </section>
-
-                    <section className="mb-6">
-                        <h2 className="text-2xl font-semibold mb-2">Support & Contact</h2>
-                        <p>
-                            For inquiries or to report human rights violations, contact the Uganda Human Rights Commission:
-                        </p>
-                        <ul className="list-disc ml-6 mt-2">
-                            <li>Email: <a href="mailto:uhrc@uhrc.ug" className="text-blue-500">uhrc@uhrc.ug</a></li>
-                            <li>Website: <a href="https://www.uhrc.ug" className="text-blue-500" target="_blank" rel="noopener noreferrer">www.uhrc.ug</a></li>
-                            <li>Visit any of the regional or field offices near you</li>
-                        </ul>
-                    </section>
-                </div>
+        <div className="text-gray-800 dark:text-white space-y-10">
+            {/* Hero blurb */}
+            <Card className="shadow-none border border-gray-200 dark:border-gray-700">
+                <h1 className="text-3xl font-bold mb-4 text-dark dark:text-white">
+                    Welcome to HomeNest
+                </h1>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    HomeNest is Uganda&apos;s trusted online destination for quality household essentials,
+                    modern home décor, and everyday comfort items. We believe that a well-furnished,
+                    thoughtfully arranged home is not a luxury — it is the foundation of a happy,
+                    productive life.
+                </p>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Whether you are setting up your first apartment, refreshing your living room, or
+                    searching for the perfect gift, HomeNest brings thousands of curated products
+                    straight to your door at fair, transparent prices.
+                </p>
             </Card>
-        </>
+
+            {/* Our story */}
+            <section>
+                <h2 className="text-2xl font-semibold mb-3 text-dark dark:text-white">Our Story</h2>
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 leading-relaxed text-gray-600 dark:text-gray-300 space-y-3">
+                    <p>
+                        HomeNest was founded with a simple observation: buying quality home goods in Uganda
+                        was either expensive, inconsistent, or required travelling across the city. We set out
+                        to change that.
+                    </p>
+                    <p>
+                        Starting with a small catalogue of kitchen and bedroom essentials, we quickly grew as
+                        customers shared our platform with friends and family. Today HomeNest stocks thousands
+                        of products across furniture, bedding, kitchen appliances, bathroom accessories,
+                        décor, and much more — all searchable, filterable, and deliverable nationwide.
+                    </p>
+                    <p>
+                        We partner with trusted local and international suppliers, negotiate the best prices,
+                        and pass those savings directly to you. Our warehouse team hand-inspects every order
+                        before dispatch so that what arrives at your door matches what you saw on screen.
+                    </p>
+                </div>
+            </section>
+
+            {/* Our values */}
+            <section>
+                <h2 className="text-2xl font-semibold mb-6 text-dark dark:text-white">What We Stand For</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {values.map((v, i) => (
+                        <div
+                            key={i}
+                            className="flex flex-col gap-3 p-5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md transition-shadow"
+                        >
+                            {v.icon}
+                            <h3 className="font-semibold text-dark dark:text-white">{v.title}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                                {v.description}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Feel & look */}
+            <section>
+                <h2 className="text-2xl font-semibold mb-3 text-dark dark:text-white">
+                    The HomeNest Feel
+                </h2>
+                <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg p-6 text-gray-600 dark:text-gray-300 leading-relaxed space-y-3">
+                    <p>
+                        From the moment you land on our platform, you will notice a clean, warm aesthetic
+                        that mirrors the comfort we promise for your home. Navigation is intentional —
+                        categories are broad enough to browse freely but granular enough to find exactly
+                        what you need in seconds.
+                    </p>
+                    <p>
+                        Product pages feature high-resolution images, honest descriptions, real customer
+                        reviews, and transparent pricing in Ugandan Shillings. No hidden charges, no
+                        confusing currency conversions.
+                    </p>
+                    <p>
+                        Our dark-mode-friendly design means you can browse comfortably at any hour, and
+                        our mobile layout ensures the full HomeNest experience fits right in your pocket.
+                    </p>
+                </div>
+            </section>
+
+            {/* Contact callout */}
+            <section>
+                <h2 className="text-2xl font-semibold mb-3 text-dark dark:text-white">
+                    Get in Touch
+                </h2>
+                <Card className="shadow-none border border-gray-200 dark:border-gray-700">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Have a question, a partnership proposal, or just want to say hello? Our team loves
+                        hearing from the HomeNest community.
+                    </p>
+                    <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                        <li>
+                            <span className="font-medium">Phone:</span>{" "}
+                            <a href="tel:+256788401004" className="text-primary hover:underline">
+                                (+256) 7884-01004
+                            </a>{" "}
+                            — available 24 / 7
+                        </li>
+                        <li>
+                            <span className="font-medium">Email:</span>{" "}
+                            <a href="mailto:support@homenest.ug" className="text-primary hover:underline">
+                                support@homenest.ug
+                            </a>
+                        </li>
+                        <li>
+                            <span className="font-medium">Location:</span> Kampala, Uganda
+                        </li>
+                    </ul>
+                </Card>
+            </section>
+        </div>
     );
 };
 

@@ -5,8 +5,9 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { FiShoppingCart, FiUser, FiPhone } from "react-icons/fi";
+import { FiShoppingCart, FiUser, FiPhone, FiHeart, FiPackage, FiSettings, FiLogOut } from "react-icons/fi";
 import useAuthContext from "@/providers/AuthProvider";
+import { useFavourites } from "@/providers/FavouritesProvider";
 import { menuData } from "./menuData";
 import SearchBar from "./SearchBar";
 import MobileMenu from "./MobileMenu";
@@ -15,8 +16,10 @@ import ThemeToggler from "./ThemeToggler";
 import ShoppingCartButton from "./shopping-cart/ShoppingCartButton";
 
 const Header = () => {
-  const { getUserQuery } = useAuthContext();
+  const { getUserQuery, logoutMutation } = useAuthContext();
   const loggedInUserData = getUserQuery?.data?.data;
+  const isSystemAdmin = loggedInUserData?.role === "System Admin";
+  const { favouriteCount } = useFavourites();
 
   const [sticky, setSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -95,36 +98,59 @@ const Header = () => {
 
             {/* Desktop: Support + User + Cart + Theme */}
             <div className="hidden xl:flex items-center gap-5">
-              {/* Support */}
-              <div className="flex items-center gap-3.5">
-                <FiPhone className="text-primary text-2xl" />
+              {/* Support — click to open phone dialer */}
+              <a href="tel:+256788401004" className="flex items-center gap-3.5 cursor-pointer group">
+                <FiPhone className="text-primary text-2xl group-hover:text-primary/80 transition-colors" />
                 <div>
                   <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">
                     24/7 SUPPORT
                   </span>
-                  <p className="font-medium text-sm text-dark dark:text-white">
+                  <p className="font-medium text-sm text-dark dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors">
                     (+256) 7884-01004
                   </p>
                 </div>
-              </div>
+              </a>
 
               <span className="w-px h-7.5 bg-gray-300 dark:bg-gray-600"></span>
 
               {/* User */}
-              <Link
-                href={loggedInUserData ? "/dashboard" : "/signin"}
-                className="flex items-center gap-2.5"
-              >
-                <FiUser className="text-primary text-2xl" />
-                <div>
-                  <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">
-                    account
-                  </span>
-                  <p className="font-medium text-sm text-dark dark:text-white">
-                    {loggedInUserData ? "Dashboard" : "Sign In"}
-                  </p>
+              {!loggedInUserData ? (
+                <Link href="/signin" className="flex items-center gap-2.5">
+                  <FiUser className="text-primary text-2xl" />
+                  <div>
+                    <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">account</span>
+                    <p className="font-medium text-sm text-dark dark:text-white">Sign In</p>
+                  </div>
+                </Link>
+              ) : isSystemAdmin ? (
+                <div className="flex items-center gap-3">
+                  <Link href="/dashboard" className="flex items-center gap-2.5">
+                    <FiUser className="text-primary text-2xl" />
+                    <div>
+                      <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">account</span>
+                      <p className="font-medium text-sm text-dark dark:text-white">Dashboard</p>
+                    </div>
+                  </Link>
+                  <button
+                    onClick={() => logoutMutation.mutate({})}
+                    title="Logout"
+                    className="flex items-center justify-center w-8 h-8 rounded-md text-dark dark:text-white hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    <FiLogOut className="text-lg" />
+                  </button>
                 </div>
-              </Link>
+              ) : (
+                <button
+                  onClick={() => logoutMutation.mutate({})}
+                  className="flex items-center gap-2.5"
+                >
+                  <FiUser className="text-primary text-2xl" />
+                  <div>
+                    <span className="block text-xs text-dark-4 dark:text-gray-400 uppercase">account</span>
+                    <p className="font-medium text-sm text-dark dark:text-white">Logout</p>
+                  </div>
+                </button>
+              )}
 
               {/* Cart */}
               <ShoppingCartButton />
@@ -181,17 +207,47 @@ const Header = () => {
                 setOpenSubmenu={setOpenSubmenu}
                 closeMenus={closeMenus}
                 loggedInUserData={loggedInUserData}
+                isSystemAdmin={isSystemAdmin}
+                logoutMutation={logoutMutation}
               />
 
-              {/* Right Nav (Wishlist) */}
+              {/* Right Nav (Favourites + Orders) */}
               <div>
                 <ul className="flex items-center gap-5.5">
+                  {loggedInUserData && (
+                    <li className="py-4">
+                      <Link
+                        href="/profile"
+                        className={`flex items-center gap-1.5 font-medium text-sm hover:text-primary dark:hover:text-primary transition-colors ${pathname === "/profile" ? "text-primary" : "text-dark dark:text-white"}`}
+                      >
+                        Profile
+                        <FiSettings className="text-xl" />
+                      </Link>
+                    </li>
+                  )}
                   <li className="py-4">
                     <Link
-                      href="/wishlist"
-                      className="flex items-center gap-1.5 font-medium text-sm text-dark dark:text-white hover:text-primary dark:hover:text-primary"
+                      href="/favourites"
+                      className={`flex items-center gap-1.5 font-medium text-sm hover:text-primary dark:hover:text-primary transition-colors ${pathname === "/favourites" ? "text-primary" : "text-dark dark:text-white"}`}
                     >
-                      Wishlist
+                      Favourites
+                      <span className="relative">
+                        <FiHeart className="text-xl" />
+                        {favouriteCount > 0 && (
+                          <span className="flex items-center justify-center font-medium text-xs absolute -right-2 -top-2.5 bg-primary w-4.5 h-4.5 rounded-full text-white">
+                            {favouriteCount > 99 ? "99+" : favouriteCount}
+                          </span>
+                        )}
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="py-4">
+                    <Link
+                      href="/orders"
+                      className={`flex items-center gap-1.5 font-medium text-sm hover:text-primary dark:hover:text-primary transition-colors ${pathname === "/orders" ? "text-primary" : "text-dark dark:text-white"}`}
+                    >
+                      Orders
+                      <FiPackage className="text-xl" />
                     </Link>
                   </li>
                 </ul>
@@ -212,6 +268,8 @@ const Header = () => {
         setOpenSubmenu={setOpenSubmenu}
         closeMenus={closeMenus}
         loggedInUserData={loggedInUserData}
+        isSystemAdmin={isSystemAdmin}
+        logoutMutation={logoutMutation}
       />
 
     </>

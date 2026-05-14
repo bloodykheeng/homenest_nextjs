@@ -8,15 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePrimeReactToast } from "@/providers/PrimeReactToastProvider";
 import useHandleMutationError from "@/hooks/useHandleMutationError";
 
-import {
-  getAllUsers,
-  getUserById,
-  postUser,
-  updateUser,
-  deleteUserById,
-  postToBulkDestroyUsers,
-} from "@/services/users/users-service";
-import RowForm from "./widgets/RowForm"; // Ensure path is correct
+import { updateUser } from "@/services/users/users-service";
+import RowForm from "./widgets/RowForm";
 
 interface EditRecordDialogProps {
   visible: boolean;
@@ -84,6 +77,38 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
     }
   };
 
+  const defaultValues = {
+    name: "",
+    email: "",
+    username: "",
+    phone: "",
+    password: "",
+    gender: undefined as "Male" | "Female" | "Prefer not to say" | undefined,
+    role: "System Admin" as const,
+    status: "active" as const,
+    photo: undefined as any,
+    photo_url: undefined as string | undefined,
+    editing: false,
+  };
+
+  const sanitizeFormData = (data: any) => {
+    if (!data) return defaultValues;
+
+    return {
+      name: data.name ?? "",
+      email: data.email ?? "",
+      username: data.username ?? "",
+      phone: data.phone ?? "",
+      password: "",
+      gender: data.gender ?? undefined,
+      role: data.role ?? "System Admin",
+      status: data.status ?? "active",
+      photo: data.photo ?? undefined,
+      photo_url: data.photo_url ?? undefined,
+      editing: true,
+    };
+  };
+
   const dialogFooter = (
     <div className="flex justify-end gap-2 mt-4">
       <Button
@@ -95,10 +120,6 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
       />
     </div>
   );
-
-  const defaultValues = {
-    name: "",
-  };
 
   return (
     <Dialog
@@ -116,14 +137,7 @@ const EditRecordDialog: React.FC<EditRecordDialogProps> = ({
         <RowForm
           handleFormSubmit={handleFormSubmit}
           formMutation={editMutation}
-          initialData={{
-            ...defaultValues,
-            ...initialData,
-            allow_notifications: initialData?.allow_notifications
-              ? true
-              : false,
-            editing: true,
-          }}
+          initialData={sanitizeFormData(initialData)}
           userId={initialData?.id}
         />
 

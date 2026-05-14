@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense } from "react";
 import Shop from "@/components/market-place/Shop";
 import { Metadata } from "next";
 
@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 const ShopPage = () => {
     return (
         <main>
-            <Shop />
+            <Suspense>
+                <Shop />
+            </Suspense>
         </main>
     );
 };
